@@ -61,7 +61,7 @@ public class PassOne {
 									.DecimalValueToHex(locationCounter);
 							tempString[0] = hexLC;
 							tempString[1] = "rel";
-							// check with ben on which oens are abs or rel
+							// check with ben on which ones are abs or rel
 							//one for rel, 0 for abs
 							//rel br,jsr,jmp,ld,ldi,lea,st,sti
 							machine.symbolTable.put(firstWord, tempString);
