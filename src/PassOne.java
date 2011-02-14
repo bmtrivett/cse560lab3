@@ -20,7 +20,7 @@ public class PassOne {
 		BufferedReader file = new BufferedReader(reader);
 		bufferedWriter = new BufferedWriter(new FileWriter("intermediate.txt"));
 		bufferedWriterComments = new BufferedWriter(new FileWriter(
-				"intermediate.txt"));
+				"comments.txt"));
 
 		read = file.readLine();
 
@@ -130,18 +130,63 @@ public class PassOne {
 						int indexSemi = read.indexOf(semicolone);
 						int indexNew = read.indexOf(newline);
 						if (indexSpace != -1) {
-							inLineLiteral = read.substring(index3 + 1,
+							inLineLiteral = read.substring(index3,
 									indexSpace);
+							if (inLineLiteral.charAt(1) == '#') {
 							//value of literal as a string, the value of hex,location counter
+								String hex = inLineLiteral.substring(index3+2,indexSpace);
+								String[] value = new String[2];
+								value[1] = hex;
+								value[2] = Utility.DecimalValueToHex(locationCounter);
 							machine.literalTable.put(inLineLiteral, value);
+							}
+							else if (inLineLiteral.charAt(1) == 'x') {
+								int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
+								String hex = Utility.DecimalValueToHex(dec);
+								String[] value = new String[2];
+								value[1] = hex;
+								value[2] = Utility.DecimalValueToHex(locationCounter);
+							machine.literalTable.put(inLineLiteral, value);
+							}
+							
 						} else if (indexSemi != -1) {
-							inLineLiteral = read.substring(index3 + 1,
+							inLineLiteral = read.substring(index3,
 									indexSemi);
-							machine.literalTable.put(inLineLiteral, value);
+							if (inLineLiteral.charAt(1) == '#') {
+								//value of literal as a string, the value of hex,location counter
+									String hex = inLineLiteral.substring(index3+2,indexSpace);
+									String[] value = new String[2];
+									value[1] = hex;
+									value[2] = Utility.DecimalValueToHex(locationCounter);
+								machine.literalTable.put(inLineLiteral, value);
+								}
+								else if (inLineLiteral.charAt(1) == 'x') {
+									int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
+									String hex = Utility.DecimalValueToHex(dec);
+									String[] value = new String[2];
+									value[1] = hex;
+									value[2] = Utility.DecimalValueToHex(locationCounter);
+								machine.literalTable.put(inLineLiteral, value);
+								}
 						} else if (indexSemi != -1) {
 							inLineLiteral = read
-									.substring(index3 + 1, indexNew);
-							machine.literalTable.put(inLineLiteral, value);
+									.substring(index3, indexNew);
+							if (inLineLiteral.charAt(1) == '#') {
+								//value of literal as a string, the value of hex,location counter
+									String hex = inLineLiteral.substring(index3+2,indexSpace);
+									String[] value = new String[2];
+									value[1] = hex;
+									value[2] = Utility.DecimalValueToHex(locationCounter);
+								machine.literalTable.put(inLineLiteral, value);
+								}
+								else if (inLineLiteral.charAt(1) == 'x') {
+									int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
+									String hex = Utility.DecimalValueToHex(dec);
+									String[] value = new String[2];
+									value[1] = hex;
+									value[2] = Utility.DecimalValueToHex(locationCounter);
+								machine.literalTable.put(inLineLiteral, value);
+								}
 						}
 
 					}
