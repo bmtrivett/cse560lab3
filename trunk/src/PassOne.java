@@ -106,6 +106,7 @@ public class PassOne {
 									machineTables.locationCounter += lc;
 
 								}
+								//fill increment by one
 
 							}
 						}
