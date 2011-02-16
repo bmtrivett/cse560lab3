@@ -24,7 +24,7 @@ public class PassTwo {
 		String name = read.substring(0, 6);
 		String start = read.substring(18, 22);
 		// i need this where is it
-		String length = PassOne.locationCounter;
+		String length = locationCounter;
 		
 		bufferedWriter.write("H" + name + start + length);
 		bufferedWriter.newLine();
@@ -38,6 +38,7 @@ public class PassTwo {
 			String operations = read.substring(9, 14);
 			if(machine.machineOpTable.containsKey(operations))
 			{
+				//check which machine op it is
 			
 				int indexNewLine = read.indexOf(newLine);
 				String operands = read.substring(17, indexNewLine);
@@ -50,11 +51,13 @@ public class PassTwo {
 							{
 						//what to do from here
 						machine.symbolTable.get(op[count]);
+						//output this value
 							}
 					if(machine.literalTable.containsKey(op[count]))
 					{
 						machine.literalTable.get(op[count]);	
 					}
+					count++;
 				}
 				 
 				 
