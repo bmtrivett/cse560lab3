@@ -11,11 +11,14 @@ public class Tables {
 	
 	public HashMap<String, String[]> literalTable;
 	
+	public Integer locationCounter;
+	
 	public Tables() {
 		machineOpTable = new HashMap<String, char[]>();
 		psuedoOpTable = new HashMap<String, Integer>();
 		symbolTable = new HashMap<String, String[]>();
 		literalTable = new HashMap<String, String[]>();
+		locationCounter = 0;
 		
 		initMachineOpTable();
 		initPsuedoOpTable();

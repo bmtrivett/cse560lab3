@@ -6,7 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class PassOne {
-	public static String SymbolTable(String input) throws IOException {
+
+	public static String run(String input, Tables machineTables) throws IOException {
 		File inputFile = new File(input);
 		boolean fileExists = inputFile.exists();
 		BufferedWriter bufferedWriter = null;
@@ -30,18 +31,16 @@ public class PassOne {
 			read = file.readLine();
 		} else {
 			String orig = read.substring(9, 14);
-			if (orig != ".ORIG") {
+			if (!orig.equals(".ORIG")) {
 				return "The string does not contain the substring ";
 			} else {
-				int locationCounter = 0;
 				String location = read.substring(18, 22);
-				if (location == "    ") {
-					locationCounter = 0000;
+				if (location.equals("    ")) {
+					machineTables.locationCounter = 0000;
 				}
 				// if its 0 - 8000 fine else throw an error
 				else {
-					locationCounter = Utility.HexToDecimalValue(location);
-					;
+					machineTables.locationCounter = Utility.HexToDecimalValue(location);
 				}
 				bufferedWriter.write(read);
 				bufferedWriter.newLine();
@@ -50,39 +49,38 @@ public class PassOne {
 
 				String end = read.substring(9, 14);
 
-				while (end != ".END") {
-					Tables machine = new Tables();
+				while (!end.equals(".END")) {
 					if (read.charAt(0) != ';') {
 
 						String firstWord = read.substring(0, 6);
-						if (firstWord != "      ") {
+						if (!firstWord.equals("      ")) {
 							String[] tempString = new String[2];
 							String hexLC = Utility
-									.DecimalValueToHex(locationCounter);
+									.DecimalValueToHex(machineTables.locationCounter);
 							tempString[0] = hexLC;
 							tempString[1] = "rel";
 							// check with ben on which ones are abs or rel
 							//one for rel, 0 for abs
 							//rel br,jsr,jmp,ld,ldi,lea,st,sti
-							machine.symbolTable.put(firstWord, tempString);
+							machineTables.symbolTable.put(firstWord, tempString);
 
 						}
 
 						String operation = read.substring(9, 14);
 
-						if (machine.machineOpTable.containsKey(operation)
-								|| machine.psuedoOpTable.containsKey(operation)) {
-							if (machine.machineOpTable.containsKey(operation)) {
+						if (machineTables.machineOpTable.containsKey(operation)
+								|| machineTables.psuedoOpTable.containsKey(operation)) {
+							if (machineTables.machineOpTable.containsKey(operation)) {
 
-								locationCounter++;
+								machineTables.locationCounter++;
 							} else {
-								if (operation == ".BLKW") {
+								if (operation.equals(".BLKW")){
 
 									if (read.charAt(17) == '#') {
 										String length = read.substring(18, 23);
 										int lcLength = Integer.parseInt(length);
 
-										locationCounter = locationCounter
+										machineTables.locationCounter = machineTables.locationCounter
 												+ lcLength;
 
 									} else if (read.charAt(17) == 'x') {
@@ -90,13 +88,13 @@ public class PassOne {
 										int lcLength = Utility
 												.HexToDecimalValue(length);
 
-										locationCounter += lcLength;
+										machineTables.locationCounter += lcLength;
 									} 
 									else {
 										// throw a motherfuckin error
 									}
 
-								} else if (operation == ".STRZ") {
+								} else if (operation.equals(".STRZ")) {
 									String text = read.substring(17);
 									String index = text.substring(18);
 
@@ -105,7 +103,7 @@ public class PassOne {
 
 									String value = read.substring(17, index3);
 									int lc = value.length();
-									locationCounter += lc;
+									machineTables.locationCounter += lc;
 
 								}
 
@@ -137,16 +135,16 @@ public class PassOne {
 								String hex = inLineLiteral.substring(index3+2,indexSpace);
 								String[] value = new String[2];
 								value[1] = hex;
-								value[2] = Utility.DecimalValueToHex(locationCounter);
-							machine.literalTable.put(inLineLiteral, value);
+								value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+							machineTables.literalTable.put(inLineLiteral, value);
 							}
 							else if (inLineLiteral.charAt(1) == 'x') {
 								int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
 								String hex = Utility.DecimalValueToHex(dec);
 								String[] value = new String[2];
 								value[1] = hex;
-								value[2] = Utility.DecimalValueToHex(locationCounter);
-							machine.literalTable.put(inLineLiteral, value);
+								value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+							machineTables.literalTable.put(inLineLiteral, value);
 							}
 							
 						} else if (indexSemi != -1) {
@@ -157,16 +155,16 @@ public class PassOne {
 									String hex = inLineLiteral.substring(index3+2,indexSpace);
 									String[] value = new String[2];
 									value[1] = hex;
-									value[2] = Utility.DecimalValueToHex(locationCounter);
-								machine.literalTable.put(inLineLiteral, value);
+									value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+								machineTables.literalTable.put(inLineLiteral, value);
 								}
 								else if (inLineLiteral.charAt(1) == 'x') {
 									int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
 									String hex = Utility.DecimalValueToHex(dec);
 									String[] value = new String[2];
 									value[1] = hex;
-									value[2] = Utility.DecimalValueToHex(locationCounter);
-								machine.literalTable.put(inLineLiteral, value);
+									value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+								machineTables.literalTable.put(inLineLiteral, value);
 								}
 						} else if (indexSemi != -1) {
 							inLineLiteral = read
@@ -176,16 +174,16 @@ public class PassOne {
 									String hex = inLineLiteral.substring(index3+2,indexSpace);
 									String[] value = new String[2];
 									value[1] = hex;
-									value[2] = Utility.DecimalValueToHex(locationCounter);
-								machine.literalTable.put(inLineLiteral, value);
+									value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+								machineTables.literalTable.put(inLineLiteral, value);
 								}
 								else if (inLineLiteral.charAt(1) == 'x') {
 									int dec = Integer.parseInt(inLineLiteral.substring(index3+2,indexSpace));
 									String hex = Utility.DecimalValueToHex(dec);
 									String[] value = new String[2];
 									value[1] = hex;
-									value[2] = Utility.DecimalValueToHex(locationCounter);
-								machine.literalTable.put(inLineLiteral, value);
+									value[2] = Utility.DecimalValueToHex(machineTables.locationCounter);
+								machineTables.literalTable.put(inLineLiteral, value);
 								}
 						}
 
