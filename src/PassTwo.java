@@ -7,7 +7,7 @@ import java.io.IOException;
 
 
 public class PassTwo {
-	public static String Output () throws IOException {
+	public static String Output (String outputName, Tables machineTables) throws IOException {
 		File inputFile = new File("intermediate.txt");
 		boolean fileExists = inputFile.exists();
 		BufferedWriter bufferedWriter = null;
