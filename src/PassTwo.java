@@ -7,7 +7,7 @@ import java.io.IOException;
 
 
 public class PassTwo {
-	public static String Output (String outputName, Tables machineTables) throws IOException {
+	public static String output (String objOutName, String ppOutName, Tables machineTables) throws IOException {
 		File inputFile = new File("intermediate.txt");
 		boolean fileExists = inputFile.exists();
 		BufferedWriter bufferedWriter = null;
@@ -24,7 +24,7 @@ public class PassTwo {
 		String name = read.substring(0, 6);
 		String start = read.substring(18, 22);
 		// i need this where is it
-		String length = locationCounter;
+		String length = Utility.DecimalValueToHex(machineTables.locationCounter);
 		
 		bufferedWriter.write("H" + name + start + length);
 		bufferedWriter.newLine();
