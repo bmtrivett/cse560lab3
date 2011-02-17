@@ -58,10 +58,13 @@ public class PassOne {
 							String hexLC = Utility
 									.DecimalValueToHex(machineTables.locationCounter);
 							tempString[0] = hexLC;
-							tempString[1] = "rel";
+							tempString[1] = "1";
 							// check with ben on which ones are abs or rel
 							//one for rel, 0 for abs
-							//rel br,jsr,jmp,ld,ldi,lea,st,sti
+							//if it contains equ its abs
+							//if cant look up in symbol table blow up
+							//only way can be relative
+							//load it in as hex value
 							machineTables.symbolTable.put(firstWord, tempString);
 
 						}
@@ -210,6 +213,8 @@ public class PassOne {
 				}
 
 			}
+			//break outta the while loop then get length of literal table
+			//add and increment 
 		}
 
 		return null;
