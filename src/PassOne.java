@@ -49,7 +49,7 @@ public class PassOne {
 
 				String end = read.substring(9, 14);
 
-				while (!end.equals(".END")) {
+				while (!end.equals(".END ")) {
 					if (read.charAt(0) != ';') {
 
 						String firstWord = read.substring(0, 6);
@@ -59,12 +59,24 @@ public class PassOne {
 									.DecimalValueToHex(machineTables.locationCounter);
 							tempString[0] = hexLC;
 							tempString[1] = "1";
-							// check with ben on which ones are abs or rel
-							//one for rel, 0 for abs
-							//if it contains equ its abs
-							//if cant look up in symbol table blow up
-							//only way can be relative
-							//load it in as hex value
+						
+							if(read.substring(9, 14) == ".EQU ")
+							{
+								String inLine = "";
+								int endIndex = read.indexOf(inLine);
+								String temp = read.substring(9, endIndex);
+								if(machineTables.symbolTable.containsKey(temp))
+								{
+									machineTables.symbolTable.put(firstWord, tempString);
+								}
+								else
+								{
+									tempString[1] = "0";
+									String[] equ = machineTables.symbolTable.get(temp);
+									firstWord = equ[1];
+									machineTables.symbolTable.put(firstWord, tempString);
+								}
+							}
 							machineTables.symbolTable.put(firstWord, tempString);
 
 						}
@@ -109,8 +121,9 @@ public class PassOne {
 									machineTables.locationCounter += lc;
 
 								}
-								//fill increment by one
-
+								else if (operation.equals(".FILL")) {
+									machineTables.locationCounter += 1;
+								}
 							}
 						}
 
@@ -211,10 +224,19 @@ public class PassOne {
 						read = file.readLine();
 					}
 				}
+				
 
 			}
 			//break outta the while loop then get length of literal table
-			//add and increment 
+			//add and increment
+			//how to do this?
+			int count = 0;
+			
+			while(machineTables.literalTable.size() > count)
+			{
+				machineTables.literalTable.values();
+			}
+			
 		}
 
 		return null;
