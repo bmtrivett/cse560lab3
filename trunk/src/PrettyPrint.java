@@ -7,17 +7,39 @@ import java.io.IOException;
 
 public class PrettyPrint {
 
-	public static void doPretty(String intermediate, String listingFile) throws IOException
+	public static String doPretty(String intermediate, String output, String listingFile) throws IOException
 	{
-/*		File inputFile = new File(intermediate);
+		File inputFile = new File(intermediate);
+		File inputFileOutput = new File(output);
 		boolean fileExists = inputFile.exists();
-*/		BufferedWriter bufferedWriter = null;
+		boolean fileExistsOutput = inputFileOutput.exists();
+		BufferedWriter bufferedWriter = null;
+		if (fileExists == false) {
+			return "The file does not exist. Try another one.";
+		}
+		if (fileExistsOutput == false) {
+			return "The file does not exist. Try another one.";
+		}
 
 
 		String read = "";
+		String readOutput = "";
 		FileReader reader = new FileReader(intermediate);
 		BufferedReader file = new BufferedReader(reader);
-		bufferedWriter = new BufferedWriter(new FileWriter(listingFile.concat(".txt")));
+		FileReader readerOuput = new FileReader(output);
+		BufferedReader fileOutput = new BufferedReader(readerOuput);
+		bufferedWriter = new BufferedWriter(new FileWriter(listingFile.concat(".lst")));
+		
+		read = file.readLine();
+		
+		readOutput = fileOutput.readLine();
+		while (read != null) {
+			
+			
+		}
 
+		
+		return null;
 	}
+	
 }

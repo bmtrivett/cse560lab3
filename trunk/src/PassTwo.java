@@ -563,8 +563,6 @@ public class PassTwo {
 				}
 				else if(operations == ".BLKW")
 				{
-					String hexAdress = Utility.DecimalValueToHex(adress);
-					textRecord = "T" + hexAdress + op[1];
 					adress += 1;
 					
 				}
@@ -579,6 +577,8 @@ public class PassTwo {
 						{
 							op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
 							textRecord = "T" + hexAdress + op[count];
+							//output right here
+							
 							adress ++;
 						}
 						op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
