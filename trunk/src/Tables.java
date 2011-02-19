@@ -79,7 +79,7 @@ public class Tables {
 		tempChar[1] = '1';
 		machineOpTable.put("JSR  ", tempChar);
 		
-		tempChar[0] = '4'; // TODO: How does jumping work? What is the opcode?
+		tempChar[0] = '4';
 		tempChar[1] = '1';
 		machineOpTable.put("JMP  ", tempChar);
 
@@ -111,7 +111,7 @@ public class Tables {
 		tempChar[1] = '2';
 		machineOpTable.put("STI  ", tempChar);
 		
-		tempChar[0] = 'C'; // TODO: How does jumping work? What is the opcode?
+		tempChar[0] = 'C';
 		tempChar[1] = '2';
 		machineOpTable.put("JMPR ", tempChar);
 		
