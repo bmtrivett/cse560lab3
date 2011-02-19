@@ -14,24 +14,24 @@ public class WilevenAssembler {
 	public static void main(String[] args) throws IOException {
 		// Make sure the arguments are well formed.
 		String[] fileNames = checkArgs(args);
-		
+
 		// Instantiate the tables.
 		Tables machineTables = new Tables();
-		
+
 		// Execute pass one.
 		String firstPassError = PassOne.run(fileNames[0], machineTables);
-		
+
 		// If the first pass ended abruptly and returned an error, display it
 		// and exit.
 		if (firstPassError.length() > 0) {
 			System.out.println("ERROR: " + firstPassError);
 			System.exit(0);
 		}
-		
+
 		// Execute pass two.
 		String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
 				machineTables);
-		
+
 		// If the second pass ended abruptly and returned an error, display it
 		// and exit.
 		if (secondPassError.length() > 0) {
@@ -106,7 +106,15 @@ public class WilevenAssembler {
 			} else {
 				ppOutName = args[3];
 			}
-
+			// Check for file extension requirements.
+			if (!(objOutName.contains(".o"))) {
+				System.out
+						.println("Warning: The object file extension is not .o");
+			}
+			if (!(ppOutName.contains(".lst"))) {
+				System.out
+						.println("Warning: The pretty print file extension is not .lst");
+			}
 			// No errors, load names into the array and return them.
 			fileNames[0] = args[0];
 			fileNames[1] = objOutName;

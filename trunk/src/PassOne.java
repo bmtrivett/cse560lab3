@@ -256,6 +256,7 @@ public class PassOne {
 			tempVal = machineTables.literalTable.remove(keys[count]);
 			machineTables.locationCounter++;
 			tempVal[1] = Utility.DecimalValueToHex(machineTables.locationCounter);
+			machineTables.literalTable.put(keys[count], tempVal);
 			count--;
 		}
 
