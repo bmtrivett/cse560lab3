@@ -17,6 +17,7 @@ public class PassTwo {
 
 		String read = "";
 		String textRecord = "";
+		 StringBuffer stringBuffer = new StringBuffer();
 		FileReader reader = new FileReader("intermediate.txt");
 		BufferedReader file = new BufferedReader(reader);
 		bufferedWriter = new BufferedWriter(new FileWriter("object.txt"));
@@ -81,14 +82,19 @@ public class PassTwo {
 					}
 					if (op[count].charAt(0) == '#') {
 						// check if neg????
-						if (op[count].charAt(0) == '-') {
-
+						int temp = 0;
+						if(op[count].charAt(1) == '-')
+						{
+						temp = Integer.parseInt(op[count].substring(1)); 
+						temp = Utility.convertToTwosComplement(temp);
 						}
-
-						String bin = Utility.DecimalValueToHex(Integer
-								.parseInt(op[count].substring(1)));
-						bin = Utility
-						.HexToBinary(bin);
+						else
+						{
+							temp = Integer.parseInt(op[count].substring(1));
+						}
+						
+						String bin = Utility.DecimalValueToHex(temp);
+						bin = Utility.HexToBinary(bin);
 						op[count] = bin;
 					}
 					// else throw a fucktard error
@@ -108,9 +114,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRN  ") {
 					binary = "0000100";
@@ -123,9 +131,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRZ  ") {
 					binary = "0000010";
@@ -137,9 +147,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRP  ") {
 					binary = "0000001";
@@ -151,9 +163,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRNZ ") {
 					binary = "0000110";
@@ -165,9 +179,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRNP ") {
 					binary = "0000101";
@@ -177,11 +193,12 @@ public class PassTwo {
 					adress = Utility.HexToDecimalValue(start);
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
-
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRZP ") {
 					binary = "0000011";
@@ -193,9 +210,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "BRNZP") {
 					binary = "0000111";
@@ -207,12 +226,14 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
-				} else if (operations == "NOP  ") {// donno
-					binary = "0000";
+				} else if (operations == "NOP  ") {
+					binary = "0000000000000000";
 
 				} else if (operations == "ADD  ") {
 					binary = "0001";
@@ -223,9 +244,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "LD   ") {
 					binary = "0010";
@@ -237,9 +260,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "ST   ") {
 					binary = "0011";
@@ -251,9 +276,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "JSR  ") {// whats L
 					binary = "0100";
@@ -265,13 +292,29 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "JMP  ") {// donno //exact copy of
 													// brnzp
 					binary = "0000";
+					op[1] = op[1].substring(7);
+					binary = binary + "0" + "11" + op[1];
+					textRecord = Utility.BinaryToHex(binary);
+					adress = Utility.HexToDecimalValue(start);
+					adress += 1;
+					String hexAdress = Utility.DecimalValueToHex(adress);
+
+					if (relative) {
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
+					} else {
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
+					}
 
 				} else if (operations == "AND  ") {
 					binary = "0101";
@@ -282,9 +325,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "LDR  ") {
 					binary = "0110";
@@ -295,9 +340,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "STR  ") {
 					binary = "0111";
@@ -308,9 +355,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "DBUG ") {
 					binary = "1000000000000000";
@@ -320,11 +369,12 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
-
 				} else if (operations == "NOT  ") {
 					binary = "1001";
 					binary = binary + op[1] + op[2] + "000000";
@@ -334,9 +384,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "LDI  ") {
 					binary = "1010";
@@ -348,9 +400,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "STI  ") {
 					binary = "1011";
@@ -362,24 +416,41 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "JMPR ") {// donno
 					binary = "0000";
-				} else if (operations == "JSRR ") {
-					binary = "1100";
-					binary = binary + "L" + "00" + op[1] + op[2];
+					binary = binary + "0" + "00" + op[1] + op[2];
 					textRecord = Utility.BinaryToHex(binary);
 					adress = Utility.HexToDecimalValue(start);
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
+					}
+				} else if (operations == "JSRR ") {
+					binary = "1100";
+					binary = binary + "1" + "00" + op[1] + op[2];
+					textRecord = Utility.BinaryToHex(binary);
+					adress = Utility.HexToDecimalValue(start);
+					adress += 1;
+					String hexAdress = Utility.DecimalValueToHex(adress);
+
+					if (relative) {
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
+					} else {
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "RET  ") {
 					binary = "1101000000000000";
@@ -389,11 +460,12 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("M").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
-
 				} else if (operations == "LEA  ") {
 					binary = "1110";
 					op[2] = op[2].substring(7);
@@ -404,9 +476,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "P" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				} else if (operations == "TRAP ") {
 					binary = "1111";
@@ -417,9 +491,11 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
 					if (relative) {
-						textRecord = "M" + hexAdress + textRecord;
+						stringBuffer.append("P").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					} else {
-						textRecord = "T" + hexAdress + textRecord;
+						stringBuffer.append("T").append(hexAdress).append(textRecord);
+						textRecord = stringBuffer.toString();
 					}
 				}
 			}
@@ -498,6 +574,14 @@ public class PassTwo {
 					{
 						//how to convert letter into hex?????
 						String hexAdress = Utility.DecimalValueToHex(adress);
+						int count2 = 1;
+						while(op[count].length() >= count2)
+						{
+							op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
+							textRecord = "T" + hexAdress + op[count];
+							adress ++;
+						}
+						op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
 						textRecord = "T" + hexAdress + op[count];
 						adress ++;
 					}
@@ -523,3 +607,4 @@ public class PassTwo {
 
 	}
 }
+
