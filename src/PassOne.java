@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Set;
 
 public class PassOne {
 
@@ -123,7 +124,7 @@ public class PassOne {
 
 								String value = read.substring(17, index3);
 								int lc = value.length();
-								machineTables.locationCounter += lc;
+								machineTables.locationCounter += lc + 1;
 
 							} else if (operation.equals(".FILL")) {
 								machineTables.locationCounter += 1;
@@ -246,13 +247,16 @@ public class PassOne {
 			}
 
 		}
-		// break outta the while loop then get length of literal table
-		// add and increment
-		// how to do this?
-		int count = 0;
-
-		while (machineTables.literalTable.size() > count) {
-			machineTables.literalTable.values();
+		
+		// Set locations in the literal table.
+		int count = machineTables.literalTable.size();
+		String keys[] = machineTables.literalTable.keySet().toArray(new String[0]);
+		String tempVal[];
+		while (count > 0) {
+			tempVal = machineTables.literalTable.remove(keys[count]);
+			machineTables.locationCounter++;
+			tempVal[1] = Utility.DecimalValueToHex(machineTables.locationCounter);
+			count--;
 		}
 
 		return null;
