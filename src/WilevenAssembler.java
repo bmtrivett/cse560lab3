@@ -73,15 +73,15 @@ public class WilevenAssembler {
 			} else {
 				hasObjName = true;
 			}
-			if (hasObjName) {
+			if (!hasObjName) {
 				// Find the dot to replace the file extension with ".o".
-				int dotLocation = args[1].indexOf(".");
+				int dotLocation = args[0].indexOf(".");
 				if (dotLocation == -1) {
 					dotLocation = args[1].length();
 				}
-				objOutName = args[1].substring(0, dotLocation) + ".o";
+				objOutName = args[0].substring(0, dotLocation) + ".o";
 			} else {
-				objOutName = args[2];
+				objOutName = args[1];
 			}
 
 			// If the object file argument was empty then use the source file
@@ -91,20 +91,20 @@ public class WilevenAssembler {
 			if (args.length < 3) {
 				// Checked first to avoid out of bounds error.
 				// Does not have a pretty print file name.
-			} else if (args[3].length() == 0) {
+			} else if (args[2].length() == 0) {
 				// Does not have a pretty print file name.
 			} else {
 				hasPpName = true;
 			}
-			if (hasPpName) {
+		if (!hasPpName) {
 				// Find the dot to replace the file extension with ".lst".
-				int dotLocation = args[1].indexOf(".");
+				int dotLocation = args[0].indexOf(".");
 				if (dotLocation == -1) {
-					dotLocation = args[1].length();
+					dotLocation = args[0].length();
 				}
-				ppOutName = args[1].substring(0, dotLocation) + ".lst";
+				ppOutName = args[0].substring(0, dotLocation) + ".lst";
 			} else {
-				ppOutName = args[3];
+				ppOutName = args[2];
 			}
 			// Check for file extension requirements.
 			if (!(objOutName.contains(".o"))) {

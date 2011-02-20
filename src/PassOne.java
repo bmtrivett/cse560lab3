@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Set;
 
 public class PassOne {
 
@@ -34,32 +33,32 @@ public class PassOne {
 			read = file.readLine();
 			lineCounter++;
 		}
-		
-		String orig = read.substring(9, 14);
+
+		String orig = overSubstring(read, 9, 14);
 		if (!orig.equals(".ORIG")) {
 			return "The string does not contain the substring ";
 		} else {
-			String location = read.substring(18, 22);
+			String location = overSubstring(read, 18, 22);
 			if (location.equals("    ")) {
-				machineTables.locationCounter = 0000;
-			}
-			// if its 0 - 8000 fine else throw an error
-			else {
+				machineTables.locationCounter = 0;
+				machineTables.isRelative = true;
+			} else {
 				machineTables.locationCounter = Utility
 						.HexToDecimalValue(location);
+				machineTables.isRelative = false;
 			}
 			bufferedWriter.write(read);
 			bufferedWriter.newLine();
 
 			read = file.readLine();
 			lineCounter++;
-			
-			String end = read.substring(9, 14);
+
+			String end = overSubstring(read, 9, 14);
 
 			while (!end.equals(".END ")) {
 				if (read.charAt(0) != ';') {
 
-					String firstWord = read.substring(0, 6);
+					String firstWord = overSubstring(read, 0, 6);
 					if (!firstWord.equals("      ")) {
 						String[] tempString = new String[2];
 						String hexLC = Utility
@@ -67,10 +66,10 @@ public class PassOne {
 						tempString[0] = hexLC;
 						tempString[1] = "1";
 
-						if (read.substring(9, 14) == ".EQU ") {
+						if (overSubstring(read, 9, 14) == ".EQU ") {
 							String inLine = "";
 							int endIndex = read.indexOf(inLine);
-							String temp = read.substring(9, endIndex);
+							String temp = overSubstring(read, 9, endIndex);
 							if (machineTables.symbolTable.containsKey(temp)) {
 								machineTables.symbolTable.put(firstWord,
 										tempString);
@@ -87,7 +86,7 @@ public class PassOne {
 
 					}
 
-					String operation = read.substring(9, 14);
+					String operation = overSubstring(read, 9, 14);
 
 					if (machineTables.machineOpTable.containsKey(operation)
 							|| machineTables.psuedoOpTable
@@ -99,14 +98,14 @@ public class PassOne {
 							if (operation.equals(".BLKW")) {
 
 								if (read.charAt(17) == '#') {
-									String length = read.substring(18, 23);
+									String length = overSubstring(read, 18, 23);
 									int lcLength = Integer.parseInt(length);
 
 									machineTables.locationCounter = machineTables.locationCounter
 											+ lcLength;
 
 								} else if (read.charAt(17) == 'x') {
-									String length = read.substring(18, 22);
+									String length = overSubstring(read, 18, 22);
 									int lcLength = Utility
 											.HexToDecimalValue(length);
 
@@ -122,7 +121,7 @@ public class PassOne {
 								String quotation = "\"";
 								int index3 = read.indexOf(quotation);
 
-								String value = read.substring(17, index3);
+								String value = overSubstring(read, 17, index3);
 								int lc = value.length();
 								machineTables.locationCounter += lc + 1;
 
@@ -150,7 +149,7 @@ public class PassOne {
 					int indexSemi = read.indexOf(semicolone);
 					int indexNew = read.indexOf(newline);
 					if (indexSpace != -1) {
-						inLineLiteral = read.substring(index3, indexSpace);
+						inLineLiteral = overSubstring(read, index3, indexSpace);
 						if (inLineLiteral.charAt(1) == '#') {
 							// value of literal as a string, the value of
 							// hex,location counter
@@ -175,7 +174,7 @@ public class PassOne {
 						}
 
 					} else if (indexSemi != -1) {
-						inLineLiteral = read.substring(index3, indexSemi);
+						inLineLiteral = overSubstring(read, index3, indexSemi);
 						if (inLineLiteral.charAt(1) == '#') {
 							// value of literal as a string, the value of
 							// hex,location counter
@@ -199,7 +198,7 @@ public class PassOne {
 									.put(inLineLiteral, value);
 						}
 					} else if (indexSemi != -1) {
-						inLineLiteral = read.substring(index3, indexNew);
+						inLineLiteral = overSubstring(read, index3, indexNew);
 						if (inLineLiteral.charAt(1) == '#') {
 							// value of literal as a string, the value of
 							// hex,location counter
@@ -230,10 +229,11 @@ public class PassOne {
 				int index4 = read.indexOf(comment);
 				if (index4 != -1) {
 					String inLineComment = read.substring(index4);
-					bufferedWriterComments.write(lineCounter + '\t' + inLineComment);
+					bufferedWriterComments.write(lineCounter + '\t'
+							+ inLineComment);
 					bufferedWriterComments.newLine();
 
-					String restOfLine = read.substring(0, index4);
+					String restOfLine = overSubstring(read, 0, index4);
 					bufferedWriter.write(restOfLine);
 					bufferedWriter.newLine();
 				}
@@ -245,17 +245,17 @@ public class PassOne {
 					lineCounter++;
 				}
 			}
-			if(end.equals(".END "))
-				
-			{
+			
+			if (end.equals(".END ")) {
 				String comment = ";";
 				int index4 = read.indexOf(comment);
 				if (index4 != -1) {
 					String inLineComment = read.substring(index4);
-					bufferedWriterComments.write(lineCounter + '\t' + inLineComment);
+					bufferedWriterComments.write(lineCounter + '\t'
+							+ inLineComment);
 					bufferedWriterComments.newLine();
 
-					String restOfLine = read.substring(0, index4);
+					String restOfLine = overSubstring(read, 0, index4);
 					bufferedWriter.write(restOfLine);
 					bufferedWriter.newLine();
 				}
@@ -270,15 +270,17 @@ public class PassOne {
 			}
 
 		}
-		
+
 		// Set locations in the literal table.
 		int count = machineTables.literalTable.size();
-		String keys[] = machineTables.literalTable.keySet().toArray(new String[0]);
+		String keys[] = machineTables.literalTable.keySet().toArray(
+				new String[0]);
 		String tempVal[];
 		while (count > 0) {
 			tempVal = machineTables.literalTable.remove(keys[count]);
 			machineTables.locationCounter++;
-			tempVal[1] = Utility.DecimalValueToHex(machineTables.locationCounter);
+			tempVal[1] = Utility
+					.DecimalValueToHex(machineTables.locationCounter);
 			machineTables.literalTable.put(keys[count], tempVal);
 			count--;
 		}
@@ -286,4 +288,26 @@ public class PassOne {
 		return null;
 
 	}
+
+	public static String overSubstring(String str, int x, int y) {
+		Boolean exceptions = true;
+		int z = 0;
+		while (exceptions && x != y) {
+			exceptions = false;
+			try {
+				str.substring(x, y);
+			} catch (Exception e) {
+				exceptions = true;
+				y--;
+				z++;
+			}
+		}
+		String temp = str.substring(x, y);
+		while (z > 0) {
+			temp = temp + " ";
+			z--;
+		}
+		return temp;
+	}
+
 }
