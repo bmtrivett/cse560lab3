@@ -245,6 +245,29 @@ public class PassOne {
 					lineCounter++;
 				}
 			}
+			if(end.equals(".END "))
+				
+			{
+				String comment = ";";
+				int index4 = read.indexOf(comment);
+				if (index4 != -1) {
+					String inLineComment = read.substring(index4);
+					bufferedWriterComments.write(lineCounter + '\t' + inLineComment);
+					bufferedWriterComments.newLine();
+
+					String restOfLine = read.substring(0, index4);
+					bufferedWriter.write(restOfLine);
+					bufferedWriter.newLine();
+				}
+
+				else {
+					bufferedWriter.write(read);
+					bufferedWriter.newLine();
+					read = file.readLine();
+					lineCounter++;
+				}
+				machineTables.locationCounter++;
+			}
 
 		}
 		
