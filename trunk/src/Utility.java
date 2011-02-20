@@ -48,7 +48,12 @@ public class Utility {
 	 * @return An integer that represents the hexadecimal parameter.
 	 */
 	public static Integer HexToDecimalValue(String hex) {
-		return Integer.parseInt(hex, 16);
+		StringBuilder temp = new StringBuilder (hex);
+		// Remove spaces.
+		while (temp.indexOf(" ") != -1){
+			temp.deleteCharAt(temp.indexOf(" "));
+		}
+		return Integer.parseInt(temp.toString(), 16);
 	}
 
 	/**

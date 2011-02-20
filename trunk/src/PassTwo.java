@@ -19,21 +19,18 @@ public class PassTwo {
 		String read = "";
 		String textRecord = "";
 		String pTextRecord = "";
-		String lineCounter = "ben where is this haha";
-		 StringBuffer stringBuffer = new StringBuffer();
+		int lineCounter = 1;
+		
+		StringBuffer stringBuffer = new StringBuffer();
 		FileReader reader = new FileReader("intermediate.txt");
 		BufferedReader file = new BufferedReader(reader);
-		bufferedWriter = new BufferedWriter(new FileWriter("object.txt"));
-		prettyPrint = new BufferedWriter(new FileWriter("listing.lst"));
+		bufferedWriter = new BufferedWriter(new FileWriter("objOutName"));
+		prettyPrint = new BufferedWriter(new FileWriter("ppOutName"));
 
 		read = file.readLine();
 		String name = read.substring(0, 6);
 		String start = read.substring(18, 22);
-		boolean relative = false;
-		if (start == "    ") {
-			relative = true;
-			start = "0000";
-		}
+	
 		int adress = Utility.HexToDecimalValue(start);
 		String length = Utility
 				.DecimalValueToHex(machineTables.locationCounter);
@@ -120,7 +117,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -144,7 +141,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -166,7 +163,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -188,7 +185,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -211,7 +208,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -233,7 +230,7 @@ public class PassTwo {
 					adress = Utility.HexToDecimalValue(start);
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -255,7 +252,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -277,7 +274,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -306,7 +303,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -328,7 +325,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -349,7 +346,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -370,7 +367,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -392,7 +389,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -413,7 +410,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -433,7 +430,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -453,7 +450,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -472,7 +469,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -492,7 +489,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -513,7 +510,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -534,7 +531,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -554,7 +551,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -574,7 +571,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -593,7 +590,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -614,7 +611,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
@@ -634,7 +631,7 @@ public class PassTwo {
 					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 
-					if (relative) {
+					if (machineTables.isRelative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
 						pTextRecord = stringBuffer.toString();
 					} else {
