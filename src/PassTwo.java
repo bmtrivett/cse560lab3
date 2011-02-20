@@ -11,16 +11,20 @@ public class PassTwo {
 		File inputFile = new File("intermediate.txt");
 		boolean fileExists = inputFile.exists();
 		BufferedWriter bufferedWriter = null;
+		BufferedWriter prettyPrint = null;
 		if (fileExists == false) {
 			return "The file does not exist. Try another one.";
 		}
 
 		String read = "";
 		String textRecord = "";
+		String pTextRecord = "";
+		String lineCounter = "ben where is this haha";
 		 StringBuffer stringBuffer = new StringBuffer();
 		FileReader reader = new FileReader("intermediate.txt");
 		BufferedReader file = new BufferedReader(reader);
 		bufferedWriter = new BufferedWriter(new FileWriter("object.txt"));
+		prettyPrint = new BufferedWriter(new FileWriter("listing.lst"));
 
 		read = file.readLine();
 		String name = read.substring(0, 6);
@@ -36,7 +40,10 @@ public class PassTwo {
 
 		bufferedWriter.write("H" + name + start + length);
 		bufferedWriter.newLine();
-
+		prettyPrint.write("										" +
+				"(" + lineCounter + ")" + "H" + name + start + length);
+		prettyPrint.newLine();
+		
 		read = file.readLine();
 		while (read != null) {
 			Tables machine = new Tables();
@@ -115,11 +122,18 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
+					
 				} else if (operations == "BRN  ") {
 					binary = "0000100";
 					//9 or 8?????
@@ -132,11 +146,17 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "BRZ  ") {
 					binary = "0000010";
 					op[1] = op[1].substring(7);
@@ -148,11 +168,17 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "BRP  ") {
 					binary = "0000001";
 					op[1] = op[1].substring(7);
@@ -164,11 +190,18 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
+					
 				} else if (operations == "BRNZ ") {
 					binary = "0000110";
 					op[1] = op[1].substring(7);
@@ -180,11 +213,18 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
+					
 				} else if (operations == "BRNP ") {
 					binary = "0000101";
 					op[1] = op[1].substring(7);
@@ -195,11 +235,17 @@ public class PassTwo {
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "BRZP ") {
 					binary = "0000011";
 					op[1] = op[1].substring(7);
@@ -211,11 +257,17 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "BRNZP") {
 					binary = "0000111";
 					op[1] = op[1].substring(7);
@@ -227,13 +279,24 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "NOP  ") {
+					//donno what this looks like in pretty print
 					binary = "0000000000000000";
+					
+					bufferedWriter.write(binary);
+					bufferedWriter.newLine();
+					prettyPrint.newLine();
 
 				} else if (operations == "ADD  ") {
 					binary = "0001";
@@ -245,11 +308,17 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "LD   ") {
 					binary = "0010";
 					op[2] = op[2].substring(7);
@@ -261,11 +330,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "ST   ") {
 					binary = "0011";
 					op[2] = op[2].substring(7);
@@ -277,11 +351,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "JSR  ") {// whats L
 					binary = "0100";
 					op[1] = op[1].substring(7);
@@ -293,11 +372,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "JMP  ") {// donno //exact copy of
 													// brnzp
 					binary = "0000";
@@ -310,11 +394,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 
 				} else if (operations == "AND  ") {
 					binary = "0101";
@@ -326,11 +415,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "LDR  ") {
 					binary = "0110";
 					binary = binary + op[1] + op[2] + op[3];
@@ -341,11 +435,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "STR  ") {
 					binary = "0111";
 					binary = binary + op[1] + op[2] + op[3];
@@ -356,11 +455,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "DBUG ") {
 					binary = "1000000000000000";
 					textRecord = Utility.BinaryToHex(binary);
@@ -370,11 +474,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "NOT  ") {
 					binary = "1001";
 					binary = binary + op[1] + op[2] + "000000";
@@ -385,11 +494,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "LDI  ") {
 					binary = "1010";
 					op[2] = op[2].substring(7);
@@ -401,11 +515,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "STI  ") {
 					binary = "1011";
 					op[2] = op[2].substring(7);
@@ -417,11 +536,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "JMPR ") {// donno
 					binary = "0000";
 					binary = binary + "0" + "00" + op[1] + op[2];
@@ -432,11 +556,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "JSRR ") {
 					binary = "1100";
 					binary = binary + "1" + "00" + op[1] + op[2];
@@ -447,11 +576,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "RET  ") {
 					binary = "1101000000000000";
 					textRecord = Utility.BinaryToHex(binary);
@@ -461,11 +595,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("M").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "LEA  ") {
 					binary = "1110";
 					op[2] = op[2].substring(7);
@@ -477,11 +616,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				} else if (operations == "TRAP ") {
 					binary = "1111";
 					binary = binary + "0000" + op[1];
@@ -492,11 +636,16 @@ public class PassTwo {
 
 					if (relative) {
 						stringBuffer.append("P").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					} else {
 						stringBuffer.append("T").append(hexAdress).append(textRecord);
-						textRecord = stringBuffer.toString();
+						pTextRecord = stringBuffer.toString();
 					}
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 				}
 			}
 			if (machine.psuedoOpTable.containsKey(operations)) {
@@ -560,9 +709,15 @@ public class PassTwo {
 				{
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					textRecord = "T" + hexAdress + op[1];
+					prettyPrint.newLine();
+					
 				}
 				else if(operations == ".BLKW")
 				{
+					String hexAdress = Utility.DecimalValueToHex(adress);
+					prettyPrint.write("(" + hexAdress + ") ");
+					prettyPrint.newLine();
+					
 					adress += 1;
 					
 				}
@@ -576,13 +731,22 @@ public class PassTwo {
 						while(op[count].length() >= count2)
 						{
 							op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
-							textRecord = "T" + hexAdress + op[count];
-							//output right here
+							pTextRecord = "T" + hexAdress + op[count];
+							bufferedWriter.write(pTextRecord);
+							bufferedWriter.newLine();
+							prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+									binary + "(" + lineCounter + ")" + pTextRecord);
+							prettyPrint.newLine();
 							
 							adress ++;
 						}
 						op[count] = Utility.DecimalValueToHex((int)op[count].charAt(count2));
-						textRecord = "T" + hexAdress + op[count];
+						pTextRecord = "T" + hexAdress + op[count];
+						bufferedWriter.write(pTextRecord);
+						bufferedWriter.newLine();
+						prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+								binary + "(" + lineCounter + ")" + pTextRecord);
+						prettyPrint.newLine();
 						adress ++;
 					}
 					
@@ -590,14 +754,21 @@ public class PassTwo {
 				else if(operations == ".FILL")
 				{
 					String hexAdress = Utility.DecimalValueToHex(adress);
-					textRecord = "T" + hexAdress + op[1];
+					pTextRecord = "T" + hexAdress + op[1];
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.write("(" + hexAdress + ") " + textRecord + " " +
+							binary + "(" + lineCounter + ")" + pTextRecord);
+					prettyPrint.newLine();
 					adress += 1;
 				}
 				else if(operations == ".END ")
 				{
 					
-					textRecord = "T" + machine.locationCounter;
-				
+					textRecord = "E" + machine.locationCounter;
+					bufferedWriter.write(pTextRecord);
+					bufferedWriter.newLine();
+					prettyPrint.newLine();
 				}
 				
 			}
