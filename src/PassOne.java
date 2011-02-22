@@ -32,7 +32,7 @@ public class PassOne {
 		// Remove all the comments at the beginning of the file and store them
 		// to comments.txt.
 		while (read.charAt(0) == ';') {
-			bufferedWriterComments.write(lineCounter + '\t' + read);
+			bufferedWriterComments.write(lineCounter + "\t" + read);
 			bufferedWriterComments.newLine();
 			read = file.readLine();
 			lineCounter++;
@@ -193,6 +193,12 @@ public class PassOne {
 								.BooleanToString(machineTables.isRelative);
 					}
 
+					// Check if the symbol already exists in the table.
+					if (machineTables.symbolTable.containsKey(firstWord)) {
+						return "Multiple definition of symbol " + firstWord
+								+ " on line " + lineCounter + ".";
+					}
+					
 					// Store the label in the symbol table.
 					machineTables.symbolTable.put(firstWord, tempString);
 
