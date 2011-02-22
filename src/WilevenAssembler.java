@@ -29,15 +29,15 @@ public class WilevenAssembler {
 		}
 
 		// Execute pass two.
-		//String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
-				//machineTables);
-
-		// If the second pass ended abruptly and returned an error, display it
-		// and exit.
-		//if (secondPassError.length() > 0) {
-			//System.out.println("ERROR: " + secondPassError);
-			//System.exit(0);
-		//}
+//		String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
+//				machineTables);
+//
+//		// If the second pass ended abruptly and returned an error, display it
+//		// and exit.
+//		if (secondPassError.length() > 0) {
+//			System.out.println("ERROR: " + secondPassError);
+//			System.exit(0);
+//		}
 	}
 
 	/**
