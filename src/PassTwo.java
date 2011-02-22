@@ -24,8 +24,8 @@ public class PassTwo {
 		StringBuffer stringBuffer = new StringBuffer();
 		FileReader reader = new FileReader("intermediate.txt");
 		BufferedReader file = new BufferedReader(reader);
-		bufferedWriter = new BufferedWriter(new FileWriter("objOutName"));
-		prettyPrint = new BufferedWriter(new FileWriter("ppOutName"));
+		bufferedWriter = new BufferedWriter(new FileWriter(objOutName));
+		prettyPrint = new BufferedWriter(new FileWriter(ppOutName));
 
 		read = file.readLine();
 		String name = read.substring(0, 6);

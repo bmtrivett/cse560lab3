@@ -10,23 +10,27 @@ public class PassOne {
 	public static String run(String input, Tables machineTables)
 			throws IOException {
 		int lineCounter = 1;
+
+		// Make sure the source file exists.
 		File inputFile = new File(input);
 		boolean fileExists = inputFile.exists();
-		BufferedWriter bufferedWriter = null;
-		BufferedWriter bufferedWriterComments = null;
 		if (fileExists == false) {
 			return "The file does not exist. Try another one.";
 		}
 
-		String read = "";
+		// Initialize input and output files.
 		FileReader reader = new FileReader(input);
 		BufferedReader file = new BufferedReader(reader);
-		bufferedWriter = new BufferedWriter(new FileWriter("intermediate.txt"));
-		bufferedWriterComments = new BufferedWriter(new FileWriter(
-				"comments.txt"));
+		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
+				"intermediate.txt"));
+		BufferedWriter bufferedWriterComments = new BufferedWriter(
+				new FileWriter("comments.txt"));
 
-		read = file.readLine();
+		// Read the first line of source.
+		String read = file.readLine();
 
+		// Remove all the comments at the beginning of the file and store them
+		// to comments.txt.
 		while (read.charAt(0) == ';') {
 			bufferedWriterComments.write(lineCounter + '\t' + read);
 			bufferedWriterComments.newLine();
@@ -34,259 +38,405 @@ public class PassOne {
 			lineCounter++;
 		}
 
+		// The first line of code that isn't a comment must be a .ORIG pseudo
+		// operation with a label.
 		String orig = overSubstring(read, 9, 14);
 		if (!orig.equals(".ORIG")) {
-			return "The string does not contain the substring ";
+			return "Missing .ORIG operation at the beginning of the source file.";
+		}
+		String origLabel = read.substring(0, 6);
+		if (origLabel.equals("      ")) {
+			return ".ORIG operation missing label.";
+		}
+
+		// Check unused space
+		if (!read.substring(6, 9).trim().equals("")
+				|| !read.substring(14, 17).trim().equals("")) {
+			return "Unused space has non-whitespace contents on line "
+					+ lineCounter + ".";
+		}
+
+		// Determine the starting location and whether it is relative or
+		// absolute.
+		String location = overSubstring(read, 18, 22);
+		if (location.equals("    ")) {
+			machineTables.locationCounter = 0;
+			machineTables.isRelative = true;
 		} else {
-			String location = overSubstring(read, 18, 22);
-			if (location.equals("    ")) {
-				machineTables.locationCounter = 0;
-				machineTables.isRelative = true;
-			} else {
-				machineTables.locationCounter = Utility
-						.HexToDecimalValue(location);
-				machineTables.isRelative = false;
+			machineTables.locationCounter = Utility.HexToDecimalValue(location);
+			machineTables.isRelative = false;
+		}
+		String origin = Utility
+				.DecimalValueToHex(machineTables.locationCounter);
+
+		// Save the .ORIG label to the symbol table.
+		String tempArray[] = new String[2];
+		tempArray[0] = Utility.DecimalValueToHex(machineTables.locationCounter);
+		tempArray[1] = Utility.BooleanToString(machineTables.isRelative);
+		machineTables.symbolTable.put(origLabel, tempArray);
+
+		// Write to the intermediate file and read the second line.
+		bufferedWriter.write(read);
+		bufferedWriter.newLine();
+		read = file.readLine();
+		lineCounter++;
+
+		// Read operations until there is a .END or the source file ends.
+		while (!overSubstring(read, 9, 14).equals(".END ")) {
+
+			// Empty line means there's no .END or the program is formatted
+			// incorrectly.
+			if (read == null || read.trim().equals("")) {
+				return "Program is missing a .END psuedo op or an empty line was read";
 			}
-			bufferedWriter.write(read);
-			bufferedWriter.newLine();
 
-			read = file.readLine();
-			lineCounter++;
+			// If the line is not a comment
+			if (read.charAt(0) != ';') {
 
-			String end = overSubstring(read, 9, 14);
+				// Check unused space
+				if (!read.substring(6, 9).trim().equals("")
+						|| !read.substring(14, 17).trim().equals("")) {
+					return "Unused space has non-whitespace contents on line "
+							+ lineCounter + ".";
+				}
 
-			while (!end.equals(".END ")) {
-				if (read.charAt(0) != ';') {
+				// Remove in line comments and write them to comments.txt.
+				String comment = ";";
+				int index4 = read.indexOf(comment);
+				if (index4 != -1) {
+					String inLineComment = read.substring(index4);
+					bufferedWriterComments.write(lineCounter + "\t-"
+							+ inLineComment);
+					bufferedWriterComments.newLine();
+					read = overSubstring(read, 0, index4);
+				}
 
-					String firstWord = overSubstring(read, 0, 6);
-					if (!firstWord.equals("      ")) {
-						String[] tempString = new String[2];
-						String hexLC = Utility
-								.DecimalValueToHex(machineTables.locationCounter);
-						tempString[0] = hexLC;
-						tempString[1] = "1";
+				// Check for a label and add it to the symbol table.
+				String firstWord = overSubstring(read, 0, 6);
+				if (!firstWord.equals("      ")) {
+					String[] tempString = new String[2];
 
-						if (overSubstring(read, 9, 14) == ".EQU ") {
-							String inLine = "";
-							int endIndex = read.indexOf(inLine);
-							String temp = overSubstring(read, 9, endIndex);
-							if (machineTables.symbolTable.containsKey(temp)) {
-								machineTables.symbolTable.put(firstWord,
-										tempString);
-							} else {
-								tempString[1] = "0";
-								String[] equ = machineTables.symbolTable
-										.get(temp);
-								firstWord = equ[1];
-								machineTables.symbolTable.put(firstWord,
-										tempString);
-							}
-						}
-						machineTables.symbolTable.put(firstWord, tempString);
-
+					// Labels must not include blanks.
+					if (firstWord.trim().contains(" ")) {
+						return "Label has a space in it on line " + lineCounter
+								+ ".";
 					}
 
-					String operation = overSubstring(read, 9, 14);
+					// Labels can't start with x or R.
+					if (firstWord.charAt(0) == 'x'
+							|| firstWord.charAt(0) == 'R') {
+						return "Label has either a x or R as the first letter on line "
+								+ lineCounter + ".";
+					}
 
-					if (machineTables.machineOpTable.containsKey(operation)
-							|| machineTables.psuedoOpTable
-									.containsKey(operation)) {
-						if (machineTables.machineOpTable.containsKey(operation)) {
+					// If the operation is .EQU then set values accordingly.
+					if (overSubstring(read, 9, 14).equals(".EQU ")) {
 
-							machineTables.locationCounter++;
+						// Check if the operand is a symbol. Symbols are
+						// length 6.
+						String temp = overSubstring(read, 17, 23);
+						if (machineTables.symbolTable.containsKey(temp)) {
+
+							// If it is then set the values of this symbol
+							// equal to that symbol.
+							tempString = machineTables.symbolTable.get(temp);
 						} else {
-							if (operation.equals(".BLKW")) {
 
-								if (read.charAt(17) == '#') {
-									String length = overSubstring(read, 18, 23);
-									int lcLength = Integer.parseInt(length);
+							// Check next to see if it is a decimal value.
+							temp = overSubstring(read, 17, read.length());
+							if (temp.charAt(0) == '#') {
+								Integer decimalOperand = Integer.parseInt(
+										temp.substring(1), 10);
+								if (decimalOperand < -32768
+										|| decimalOperand > 32767) {
+									return "Decimal out of range on line "
+											+ lineCounter + ".";
+								}
+								tempString[0] = Utility
+										.DecimalValueToHex(Utility
+												.convertToTwosComplement(decimalOperand));
+								tempString[1] = "0";
 
-									machineTables.locationCounter = machineTables.locationCounter
-											+ lcLength;
+								// Check if it is a hex value.
+							} else if (temp.charAt(0) == 'x') {
+								if (!Utility.isHexString(temp.substring(1))) {
+									return "Invalid hexadecimal value on line "
+											+ lineCounter + ".";
+								}
+								tempString[0] = Utility
+										.DecimalValueToHex(Utility
+												.HexToDecimalValue(temp
+														.substring(1)));
+								tempString[1] = "0";
 
-								} else if (read.charAt(17) == 'x') {
-									String length = overSubstring(read, 18, 22);
-									int lcLength = Utility
-											.HexToDecimalValue(length);
+								// Check if it is a register.
+							} else if (temp.charAt(0) == 'R') {
+								int count = Integer.parseInt(temp.substring(1,
+										2));
+								if (count < 0 || count > 7) {
+									return "Invalid register symbol assignment on line "
+											+ lineCounter + ".";
+								}
+								tempString[0] = Utility
+										.DecimalValueToHex(count);
+								tempString[1] = "0";
+							} else {
+								return "Symbol must be previously defined for a .EQU operation.";
+							}
+						}
+					} else {
+						// Store the symbol's value based on the location
+						// counter if it is not on a .EQU operation.
+						tempString[0] = Utility
+								.DecimalValueToHex(machineTables.locationCounter);
+						tempString[1] = Utility
+								.BooleanToString(machineTables.isRelative);
+					}
 
-									machineTables.locationCounter += lcLength;
-								} else {
-									// throw a motherfuckin error
+					// Store the label in the symbol table.
+					machineTables.symbolTable.put(firstWord, tempString);
+
+					// If there was no label check if operation was .EQU.
+				} else if (overSubstring(read, 9, 14).equals(".EQU ")) {
+					return ".EQU operation requires a label on line "
+							+ lineCounter + ".";
+				}
+
+				// Increment the location counter based on the operation.
+				String operation = overSubstring(read, 9, 14);
+				if (machineTables.machineOpTable.containsKey(operation)
+						|| machineTables.psuedoOpTable.containsKey(operation)) {
+
+					// All built in machine operations increment the
+					// location counter by one.
+					if (machineTables.machineOpTable.containsKey(operation)) {
+						machineTables.locationCounter++;
+					} else {
+
+						// BLKW increments the location counter by the value
+						// indicated in it's operand.
+						if (operation.equals(".BLKW")) {
+
+							// Check if the operand is a symbol. Symbols are
+							// length 6.
+							String temp = overSubstring(read, 17, 23);
+							if (machineTables.symbolTable.containsKey(temp)) {
+
+								// BLKW operations can only use symbols that
+								// have absolute values.
+								if (machineTables.symbolTable.get(temp)[1]
+										.equals("1")) {
+									return ".BLKW operation using symbol that is relative on line "
+											+ lineCounter + ".";
 								}
 
-							} else if (operation.equals(".STRZ")) {
-								String text = read.substring(17);
-								String index = text.substring(18);
+								// If it is then add the value of this
+								// symbol to the location counter.
+								machineTables.locationCounter += Utility
+										.HexToDecimalValue(machineTables.symbolTable
+												.get(temp)[0]);
+							} else {
 
-								String quotation = "\"";
-								int index3 = read.indexOf(quotation);
+								// Check next to see if it is a decimal
+								// value.
+								temp = overSubstring(read, 17, read.length());
+								if (temp.charAt(0) == '#') {
+									Integer decimalOperand = Integer.parseInt(
+											temp.substring(1), 10);
+									if (decimalOperand < 1
+											|| decimalOperand > 65535) {
+										return "Decimal out of range on line "
+												+ lineCounter + ".";
+									}
+									machineTables.locationCounter += decimalOperand;
 
-								String value = overSubstring(read, 17, index3);
-								int lc = value.length();
-								machineTables.locationCounter += lc + 1;
-
-							} else if (operation.equals(".FILL")) {
-								machineTables.locationCounter += 1;
+									// Check if it is a hex value.
+								} else if (temp.charAt(0) == 'x') {
+									if (!Utility.isHexString(temp.substring(1))) {
+										return "Invalid hexadecimal value on line "
+												+ lineCounter + ".";
+									}
+									machineTables.locationCounter += Utility
+											.HexToDecimalValue(temp
+													.substring(1));
+								} else {
+									return "Symbol must be previously defined for a .BLKW operation.";
+								}
 							}
+
+							// STRZ increments the location counter by the
+							// string's length in the operand plus 1.
+						} else if (operation.equals(".STRZ")) {
+							String text = read.substring(18);
+							String quotation = "\"";
+							int index3 = text.indexOf(quotation);
+							if (index3 == -1 || read.charAt(17) != '\"') {
+								return ".STRZ operand missing quotations on line "
+										+ lineCounter + ".";
+							}
+							String value = overSubstring(read, 18, index3);
+							machineTables.locationCounter += value.length() + 1;
+
+						} else if (operation.equals(".FILL")) {
+							machineTables.locationCounter += 1;
 						}
 					}
-
-					else {
-						return "error";
-					}
-
 				}
-				String literal = "=";
-				String inLineLiteral = "";
-				int index3 = read.indexOf(literal);
-				// read till ; /n " "
-				// do they need to be hex and whats the value
+
+				// Operation was not in machine/pseudo op tables.
+				else {
+					return "Invalid operation: " + read.substring(9, 14)
+							+ " not defined on line " + lineCounter + ".";
+				}
+
+				// Check for literals to add to the literal table.
+				int index3 = read.indexOf("=");
 				if (index3 != -1) {
-					String space = " ";
-					String semicolone = ";";
-					String newline = "\n";
-					int indexSpace = read.indexOf(space);
-					int indexSemi = read.indexOf(semicolone);
-					int indexNew = read.indexOf(newline);
-					if (indexSpace != -1) {
-						inLineLiteral = overSubstring(read, index3, indexSpace);
-						if (inLineLiteral.charAt(1) == '#') {
-							// value of literal as a string, the value of
-							// hex,location counter
-							String hex = inLineLiteral.substring(index3 + 2,
-									indexSpace);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						} else if (inLineLiteral.charAt(1) == 'x') {
-							int dec = Integer.parseInt(inLineLiteral.substring(
-									index3 + 2, indexSpace));
-							String hex = Utility.DecimalValueToHex(dec);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						}
-
-					} else if (indexSemi != -1) {
-						inLineLiteral = overSubstring(read, index3, indexSemi);
-						if (inLineLiteral.charAt(1) == '#') {
-							// value of literal as a string, the value of
-							// hex,location counter
-							String hex = inLineLiteral.substring(index3 + 2,
-									indexSpace);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						} else if (inLineLiteral.charAt(1) == 'x') {
-							int dec = Integer.parseInt(inLineLiteral.substring(
-									index3 + 2, indexSpace));
-							String hex = Utility.DecimalValueToHex(dec);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						}
-					} else if (indexSemi != -1) {
-						inLineLiteral = overSubstring(read, index3, indexNew);
-						if (inLineLiteral.charAt(1) == '#') {
-							// value of literal as a string, the value of
-							// hex,location counter
-							String hex = inLineLiteral.substring(index3 + 2,
-									indexSpace);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						} else if (inLineLiteral.charAt(1) == 'x') {
-							int dec = Integer.parseInt(inLineLiteral.substring(
-									index3 + 2, indexSpace));
-							String hex = Utility.DecimalValueToHex(dec);
-							String[] value = new String[2];
-							value[1] = hex;
-							value[2] = Utility
-									.DecimalValueToHex(machineTables.locationCounter);
-							machineTables.literalTable
-									.put(inLineLiteral, value);
-						}
+					if (!read.substring(9, 14).equals("LD   ")) {
+						return "Literal used in an operation other than LD on line "
+								+ lineCounter + ".";
 					}
 
+					// Get just the literal value with no space on the end.
+					String temp = overSubstring(read, index3 + 1, read.length())
+							.trim();
+					String tempString[] = new String[2];
+
+					// Check next to see if it is a decimal value.
+					if (temp.charAt(0) == '#') {
+						Integer decimalOperand = Integer.parseInt(
+								temp.substring(1), 10);
+						if (decimalOperand < -32768 || decimalOperand > 32767) {
+							return "Decimal out of range on line "
+									+ lineCounter + ".";
+						}
+						tempString[0] = Utility.DecimalValueToHex(Utility
+								.convertToTwosComplement(decimalOperand));
+
+						// Check if it is a hex value.
+					} else if (temp.charAt(0) == 'x') {
+						if (!Utility.isHexString(temp.substring(1))) {
+							return "Invalid hexadecimal value on line "
+									+ lineCounter + ".";
+						}
+						tempString[0] = Utility.DecimalValueToHex(Utility
+								.HexToDecimalValue(temp.substring(1)));
+					} else {
+						return "Literal with incorrect format on line "
+								+ lineCounter + ".";
+					}
+
+					// Store the literal in the literal table.
+					machineTables.literalTable.put(temp, tempString);
 				}
 
-				String comment = ";";
-				int index4 = read.indexOf(comment);
-				if (index4 != -1) {
-					String inLineComment = read.substring(index4);
-					bufferedWriterComments.write(lineCounter + '\t'
-							+ inLineComment);
-					bufferedWriterComments.newLine();
+				// Write the line of source code to the intermediate file
+				// and read the next line.
+				bufferedWriter.write(read);
+				bufferedWriter.newLine();
+				read = file.readLine();
+				lineCounter++;
 
-					String restOfLine = overSubstring(read, 0, index4);
-					bufferedWriter.write(restOfLine);
-					bufferedWriter.newLine();
-				}
-
-				else {
-					bufferedWriter.write(read);
-					bufferedWriter.newLine();
-					read = file.readLine();
-					lineCounter++;
-				}
+				// Line is a comment. Write line to comments.txt and
+				// increment line counter.
+			} else {
+				bufferedWriterComments.write(lineCounter + "\t" + read);
+				bufferedWriterComments.newLine();
+				read = file.readLine();
+				lineCounter++;
 			}
-			
-			if (end.equals(".END ")) {
-				String comment = ";";
-				int index4 = read.indexOf(comment);
-				if (index4 != -1) {
-					String inLineComment = read.substring(index4);
-					bufferedWriterComments.write(lineCounter + '\t'
-							+ inLineComment);
-					bufferedWriterComments.newLine();
+		}
 
-					String restOfLine = overSubstring(read, 0, index4);
-					bufferedWriter.write(restOfLine);
-					bufferedWriter.newLine();
-				}
+		// Remove in line comments and write them to comments.txt.
+		String comment = ";";
+		int index4 = read.indexOf(comment);
+		if (index4 != -1) {
+			String inLineComment = read.substring(index4);
+			bufferedWriterComments.write(lineCounter + "\t-" + inLineComment);
+			bufferedWriterComments.newLine();
+			read = overSubstring(read, 0, index4);
+		}
 
-				else {
-					bufferedWriter.write(read);
-					bufferedWriter.newLine();
-					read = file.readLine();
-					lineCounter++;
+		// To exit the while loop successfully a .END pseudo op must have been
+		// read. Make sure the the operand is a previously defined symbol or a
+		// hex value.
+		String temp = overSubstring(read, 17, 23);
+		if (machineTables.symbolTable.containsKey(temp)) {
+
+			// If it is then use the value of this
+			// symbol as the starting location.
+			machineTables.startingLocation = machineTables.symbolTable
+					.get(temp)[0];
+		} else {
+			temp = read.substring(17).trim();
+
+			// Check if it is a hex value.
+			if (temp.charAt(0) == 'x') {
+				if (!Utility.isHexString(temp.substring(1))) {
+					return "Invalid hexadecimal value on line " + lineCounter
+							+ ".";
 				}
-				machineTables.locationCounter++;
+				machineTables.startingLocation = temp.substring(1);
+			} else if (temp.equals("")) {
+				machineTables.startingLocation = origin;
+			} else {
+				return "Symbol must be previously defined for a .END operation.";
 			}
+		}
 
+		// Must be within maximum number of symbols allowed.
+		int count = machineTables.symbolTable.size();
+		if (count > machineTables.MAX_SYMBOLS) {
+			return "Maximum number of symbols(" + machineTables.MAX_SYMBOLS
+					+ ") exceeded: " + count + ".";
+		}
+
+		// Must be within maximum number of source records allowed.
+		count = lineCounter;
+		if (count > machineTables.MAX_RECORDS) {
+			return "Maximum number of source records("
+					+ machineTables.MAX_RECORDS + ") exceeded: " + count + ".";
+		}
+
+		// Must be within maximum number of literals allowed.
+		count = machineTables.literalTable.size();
+		if (count > machineTables.MAX_LITERALS) {
+			return "Maximum number of literals(" + machineTables.MAX_LITERALS
+					+ ") exceeded: " + count + ".";
 		}
 
 		// Set locations in the literal table.
-		int count = machineTables.literalTable.size();
 		String keys[] = machineTables.literalTable.keySet().toArray(
 				new String[0]);
 		String tempVal[];
 		while (count > 0) {
-			tempVal = machineTables.literalTable.remove(keys[count]);
 			machineTables.locationCounter++;
+			tempVal = machineTables.literalTable.remove(keys[count - 1]);
 			tempVal[1] = Utility
 					.DecimalValueToHex(machineTables.locationCounter);
-			machineTables.literalTable.put(keys[count], tempVal);
+			machineTables.literalTable.put(keys[count - 1], tempVal);
 			count--;
 		}
 
-		return null;
+		// Make sure the program fits on one page of memory.
+		if (!Utility.DecimalValueToHex(machineTables.locationCounter)
+				.substring(0, 2).equals(origin.substring(0, 2))) {
+			return "Program exceeds one page of memory: Starting location = "
+					+ origin + " Final location = "
+					+ Utility.DecimalValueToHex(machineTables.locationCounter)
+					+ ".";
+		}
 
+		// Write the .END line of source code to the intermediate file.
+		bufferedWriter.write(read);
+		bufferedWriter.newLine();
+
+		// Close output streams.
+		bufferedWriter.close();
+		bufferedWriterComments.close();
+
+		// Finish with no errors by returning null.
+		return null;
 	}
 
 	public static String overSubstring(String str, int x, int y) {
@@ -309,5 +459,4 @@ public class PassOne {
 		}
 		return temp;
 	}
-
 }
