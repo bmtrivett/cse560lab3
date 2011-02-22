@@ -1,6 +1,5 @@
 import java.util.HashMap;
 
-
 public class Tables {
 	
 	public HashMap<String, char[]> machineOpTable;
@@ -15,6 +14,14 @@ public class Tables {
 	
 	public Boolean isRelative;
 	
+	public String startingLocation;
+	
+	public final Integer MAX_SYMBOLS = 100;
+	
+	public final Integer MAX_LITERALS = 50;
+	
+	public final Integer MAX_RECORDS = 200;
+	
 	public Tables() {
 		machineOpTable = new HashMap<String, char[]>();
 		psuedoOpTable = new HashMap<String, Integer>();
@@ -22,6 +29,7 @@ public class Tables {
 		literalTable = new HashMap<String, String[]>();
 		locationCounter = 0;
 		isRelative = false;
+		startingLocation = "0000";
 		
 		initMachineOpTable();
 		initPsuedoOpTable();

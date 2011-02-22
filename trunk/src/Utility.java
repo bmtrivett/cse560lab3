@@ -83,6 +83,9 @@ public class Utility {
 	public static Boolean isHexString(String value) {
 		try {
 			Integer.parseInt(value, 16);
+			if (value.length() > 4){
+				return false;
+			}
 		} catch (Exception e) {
 			return false;
 		}

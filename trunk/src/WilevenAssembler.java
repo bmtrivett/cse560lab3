@@ -23,21 +23,21 @@ public class WilevenAssembler {
 
 		// If the first pass ended abruptly and returned an error, display it
 		// and exit.
-		if (firstPassError.length() > 0) {
+		if (firstPassError != null) {
 			System.out.println("ERROR: " + firstPassError);
 			System.exit(0);
 		}
 
 		// Execute pass two.
-		String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
-				machineTables);
+		//String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
+		//		machineTables);
 
 		// If the second pass ended abruptly and returned an error, display it
 		// and exit.
-		if (secondPassError.length() > 0) {
-			System.out.println("ERROR: " + secondPassError);
-			System.exit(0);
-		}
+	//	if (secondPassError.length() > 0) {
+	//		System.out.println("ERROR: " + secondPassError);
+	//		System.exit(0);
+	//	}
 	}
 
 	/**
