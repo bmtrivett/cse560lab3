@@ -44,14 +44,14 @@ public class PassOne {
 		if (!orig.equals(".ORIG")) {
 			return "Missing .ORIG operation at the beginning of the source file.";
 		}
-		String origLabel = read.substring(0, 6);
+		String origLabel = overSubstring(read, 0, 6);
 		if (origLabel.equals("      ")) {
 			return ".ORIG operation missing label.";
 		}
 
 		// Check unused space
-		if (!read.substring(6, 9).trim().equals("")
-				|| !read.substring(14, 17).trim().equals("")) {
+		if (!overSubstring(read, 6, 9).trim().equals("")
+				|| !overSubstring(read, 14, 17).trim().equals("")) {
 			return "Unused space has non-whitespace contents on line "
 					+ lineCounter + ".";
 		}
@@ -94,8 +94,8 @@ public class PassOne {
 			if (read.charAt(0) != ';') {
 
 				// Check unused space
-				if (!read.substring(6, 9).trim().equals("")
-						|| !read.substring(14, 17).trim().equals("")) {
+				if (!overSubstring(read, 6, 9).trim().equals("")
+						|| !overSubstring(read, 14, 17).trim().equals("")) {
 					return "Unused space has non-whitespace contents on line "
 							+ lineCounter + ".";
 				}
@@ -128,6 +128,14 @@ public class PassOne {
 						return "Label has either a x or R as the first letter on line "
 								+ lineCounter + ".";
 					}
+
+					// Labels must be alphanumeric.
+					if (!firstWord.matches("[a-zA-z0-9 ]*")) {
+						return "Label must have only alphanumeric characters on line "
+								+ lineCounter + ".";
+					}
+					
+					// TODO: Labels cannot be a predefined operation
 
 					// If the operation is .EQU then set values accordingly.
 					if (overSubstring(read, 9, 14).equals(".EQU ")) {
@@ -291,14 +299,14 @@ public class PassOne {
 
 				// Operation was not in machine/pseudo op tables.
 				else {
-					return "Invalid operation: " + read.substring(9, 14)
+					return "Invalid operation: " + overSubstring(read, 9, 14)
 							+ " not defined on line " + lineCounter + ".";
 				}
 
 				// Check for literals to add to the literal table.
 				int index3 = read.indexOf("=");
 				if (index3 != -1) {
-					if (!read.substring(9, 14).equals("LD   ")) {
+					if (!overSubstring(read, 9, 14).equals("LD   ")) {
 						return "Literal used in an operation other than LD on line "
 								+ lineCounter + ".";
 					}
