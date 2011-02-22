@@ -92,13 +92,16 @@ public class PassOne {
 
 			// If the line is not a comment
 			if (read.charAt(0) != ';') {
-
+				
 				// Check unused space
-				if (!overSubstring(read, 6, 9).trim().equals("")
-						|| !overSubstring(read, 14, 17).trim().equals("")) {
-					return "Unused space has non-whitespace contents on line "
-							+ lineCounter + ".";
+				if (read.length()>16) {
+					if (!overSubstring(read, 6, 9).trim().equals("")
+							|| !overSubstring(read, 14, 17).trim().equals("")) {
+						return "Unused space has non-whitespace contents on line "
+								+ lineCounter + ".";
+					}
 				}
+				
 
 				// Remove in line comments and write them to comments.txt.
 				String comment = ";";
@@ -374,7 +377,10 @@ public class PassOne {
 		// To exit the while loop successfully a .END pseudo op must have been
 		// read. Make sure the the operand is a previously defined symbol or a
 		// hex value.
-		String temp = overSubstring(read, 17, 23);
+		String temp = "";
+		if (read.length() > 16) {
+			temp = overSubstring(read, 17, 23);
+		}
 		if (machineTables.symbolTable.containsKey(temp)) {
 
 			// If it is then use the value of this
@@ -382,17 +388,19 @@ public class PassOne {
 			machineTables.startingLocation = machineTables.symbolTable
 					.get(temp)[0];
 		} else {
-			temp = read.substring(17).trim();
+			if (read.length() > 16) {
+				temp = read.substring(17).trim();
+			}
 
 			// Check if it is a hex value.
-			if (temp.charAt(0) == 'x') {
+			if (temp.equals("")) {
+				machineTables.startingLocation = origin;
+			} else if (temp.charAt(0) == 'x') {
 				if (!Utility.isHexString(temp.substring(1))) {
 					return "Invalid hexadecimal value on line " + lineCounter
 							+ ".";
 				}
 				machineTables.startingLocation = temp.substring(1);
-			} else if (temp.equals("")) {
-				machineTables.startingLocation = origin;
 			} else {
 				return "Symbol must be previously defined for a .END operation.";
 			}
