@@ -198,7 +198,7 @@ public class PassOne {
 						return "Multiple definition of symbol " + firstWord
 								+ " on line " + lineCounter + ".";
 					}
-					
+
 					// Store the label in the symbol table.
 					machineTables.symbolTable.put(firstWord, tempString);
 
@@ -424,13 +424,17 @@ public class PassOne {
 			count--;
 		}
 
-		// Make sure the program fits on one page of memory.
-		if (!Utility.DecimalValueToHex(machineTables.locationCounter)
-				.substring(0, 2).equals(origin.substring(0, 2))) {
-			return "Program exceeds one page of memory: Starting location = "
-					+ origin + " Final location = "
-					+ Utility.DecimalValueToHex(machineTables.locationCounter)
-					+ ".";
+		// Make sure the program fits on one page of memory if relative.
+		if (machineTables.isRelative) {
+			if (!Utility.DecimalValueToHex(machineTables.locationCounter)
+					.substring(0, 2).equals(origin.substring(0, 2))) {
+				return "Program exceeds one page of memory: Starting location = "
+						+ origin
+						+ " Final location = "
+						+ Utility
+								.DecimalValueToHex(machineTables.locationCounter)
+						+ ".";
+			}
 		}
 
 		// Write the .END line of source code to the intermediate file.
@@ -445,7 +449,7 @@ public class PassOne {
 		return null;
 	}
 
-	public static String overSubstring(String str, int x, int y) {
+	private static String overSubstring(String str, int x, int y) {
 		Boolean exceptions = true;
 		int z = 0;
 		while (exceptions && x != y) {

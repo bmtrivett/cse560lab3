@@ -21,8 +21,8 @@ public class PassTwo {
 				objOutName));
 		BufferedWriter prettyPrint = new BufferedWriter(new FileWriter(
 				ppOutName));
-		String textRecord;
-		String pTextRecord;
+		String textRecord = null;
+		String pTextRecord = null;
 		Integer lineCounter = 1;
 
 		// Read in first line from the intermediate and comments files.
@@ -31,6 +31,7 @@ public class PassTwo {
 
 		// (!readC.substring(readC.indexOf(";")-1,readC.indexOf(";")).equals("-"))
 		// Write all of the first full line comments.
+		/*
 		while (readC.startsWith(lineCounter.toString())
 				&& !readC.substring(readC.indexOf(";") - 1, readC.indexOf(";"))
 						.equals("-")) {
@@ -39,9 +40,10 @@ public class PassTwo {
 			readC = comments.readLine();
 			lineCounter++;
 		}
+		*/
 
 		// Use the label of the .ORIG as the name of the program.
-		String name = read.substring(0, 6);
+		String name = overSubstring(read, 0, 6);
 
 		// Use starting location determined from the .END operation in pass one.
 		String start = machineTables.startingLocation;
@@ -66,11 +68,11 @@ public class PassTwo {
 			String newLine = "\n";
 			String binary = "";
 			int count = 1;
-			String operations = read.substring(9, 14);
+			String operations = overSubstring(read, 9, 14);
 			if (machine.machineOpTable.containsKey(operations)) {
 
 				int indexNewLine = read.indexOf(newLine);
-				String operands = read.substring(17, indexNewLine);
+				String operands = overSubstring(read, 17, indexNewLine);
 				String delims = "[,]";
 				op = operands.split(delims);
 				// minus 1 anyone know
@@ -712,7 +714,7 @@ public class PassTwo {
 			}
 			if (machine.psuedoOpTable.containsKey(operations)) {
 				int indexNewLine = read.indexOf(newLine);
-				String operands = read.substring(17, indexNewLine);
+				String operands = overSubstring(read, 17, indexNewLine);
 				String delims = "[,]";
 				op = operands.split(delims);
 				// minus 1 anyone know
@@ -759,7 +761,7 @@ public class PassTwo {
 						String quotation = "\"";
 						int index3 = read.indexOf(quotation);
 
-						String value = read.substring(1, index3);
+						String value = overSubstring(read, 1, index3);
 						op[count] = value;
 
 					}
@@ -835,4 +837,26 @@ public class PassTwo {
 		return null;
 
 	}
+	
+	private static String overSubstring(String str, int x, int y) {
+		Boolean exceptions = true;
+		int z = 0;
+		while (exceptions && x != y) {
+			exceptions = false;
+			try {
+				str.substring(x, y);
+			} catch (Exception e) {
+				exceptions = true;
+				y--;
+				z++;
+			}
+		}
+		String temp = str.substring(x, y);
+		while (z > 0) {
+			temp = temp + " ";
+			z--;
+		}
+		return temp;
+	}
+	
 }
