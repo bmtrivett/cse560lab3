@@ -1,0 +1,13 @@
+Case03   .ORIG   x0
+Start    BR      x4  ;#4
+         LD      R1,xB0
+         LEA     R0,xB7
+         TRAP    x22
+         ADD     R1,R1,#-1
+         BRP     xB3
+         TRAP    x25
+         BR      x68  ;`h`
+         BR      x69 ;`i`
+         BR      x20 ;` `
+         BR      x0 ;\0
+         .END    Start

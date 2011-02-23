@@ -48,9 +48,9 @@ public class Utility {
 	 * @return An integer that represents the hexadecimal parameter.
 	 */
 	public static Integer HexToDecimalValue(String hex) {
-		StringBuilder temp = new StringBuilder (hex);
+		StringBuilder temp = new StringBuilder(hex);
 		// Remove spaces.
-		while (temp.indexOf(" ") != -1){
+		while (temp.indexOf(" ") != -1) {
 			temp.deleteCharAt(temp.indexOf(" "));
 		}
 		return Integer.parseInt(temp.toString(), 16);
@@ -67,7 +67,7 @@ public class Utility {
 		StringBuilder hexString = new StringBuilder();
 		hexString.append(Integer.toHexString(value).toUpperCase());
 		while (hexString.length() < 4) {
-			hexString.insert(0,"0");
+			hexString.insert(0, "0");
 		}
 		return hexString.toString();
 	}
@@ -83,7 +83,7 @@ public class Utility {
 	public static Boolean isHexString(String value) {
 		try {
 			Integer.parseInt(value, 16);
-			if (value.length() > 4){
+			if (value.length() > 4) {
 				return false;
 			}
 		} catch (Exception e) {

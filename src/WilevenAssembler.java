@@ -1,5 +1,10 @@
 import java.io.IOException;
 
+/**
+ * This class controls the assembler and displays errors that occur.
+ * 
+ * @author Ben Trivett
+ */
 public class WilevenAssembler {
 
 	/**
@@ -29,15 +34,15 @@ public class WilevenAssembler {
 		}
 
 		// Execute pass two.
-//		String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
-//				machineTables);
-//
-//		// If the second pass ended abruptly and returned an error, display it
-//		// and exit.
-//		if (secondPassError.length() > 0) {
-//			System.out.println("ERROR: " + secondPassError);
-//			System.exit(0);
-//		}
+		String secondPassError = PassTwo.output(fileNames[1], fileNames[2],
+				machineTables);
+
+		// If the second pass ended abruptly and returned an error, display it
+		// and exit.
+		if (secondPassError != null) {
+			System.out.println("ERROR: " + secondPassError);
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -96,7 +101,7 @@ public class WilevenAssembler {
 			} else {
 				hasPpName = true;
 			}
-		if (!hasPpName) {
+			if (!hasPpName) {
 				// Find the dot to replace the file extension with ".lst".
 				int dotLocation = args[0].indexOf(".");
 				if (dotLocation == -1) {
