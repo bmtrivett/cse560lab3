@@ -76,7 +76,7 @@ public class PassOne {
 		machineTables.symbolTable.put(origLabel, tempArray);
 
 		// Write to the intermediate file and read the second line.
-		bufferedWriter.write(read);
+		bufferedWriter.write(lineCounter + ":" + read);
 		bufferedWriter.newLine();
 		read = file.readLine();
 		lineCounter++;
@@ -349,7 +349,7 @@ public class PassOne {
 
 				// Write the line of source code to the intermediate file
 				// and read the next line.
-				bufferedWriter.write(read);
+				bufferedWriter.write(lineCounter + ":" + read);
 				bufferedWriter.newLine();
 				read = file.readLine();
 				lineCounter++;
@@ -454,7 +454,7 @@ public class PassOne {
 		}
 
 		// Write the .END line of source code to the intermediate file.
-		bufferedWriter.write(read);
+		bufferedWriter.write(lineCounter + ":" + read);
 		bufferedWriter.newLine();
 
 		// Close output streams.
