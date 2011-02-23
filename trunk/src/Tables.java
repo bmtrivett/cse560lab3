@@ -8,28 +8,66 @@ import java.util.HashMap;
  */
 public class Tables {
 
+	/**
+	 * The machineOpTable is a hash map with the key being a string of the 
+	 * instruction and the value as a character array. 
+	 * The format of the array is as follows:
+	 * Position  0: hex value of instruction
+	 * Position  1: 0,1,2,3 depending on the number of operands the instruction has
+	 */
 	public HashMap<String, char[]> machineOpTable;
-
+	/**
+	 * The pseudoOpTable is a hash map with the key being the instruction 
+	 * as a  string and the value of the number of operands as an integer.
+	 */
 	public HashMap<String, Integer> psuedoOpTable;
+	/**
+	 * The symbolTable is a hash map that has the label as the string 
+	 * key and the value as a string array. The format of the array is as follows:
+	 * Position 0: A hex string representing the location/value of that label
+	 * Position 1: Ò0Ó for absolute or Ò1Ó for relative
+	 */
 
 	public HashMap<String, String[]> symbolTable;
-
+	/**
+	 * The literalTable is a hash map with the key being ÒxHEXÓ/Ó#DECÓ as a string. 
+	 * The value in the map is a string array with pos 0 being the hex value of the 
+	 * literal (string length 4).
+	 */
 	public HashMap<String, String[]> literalTable;
-
+	/**
+	 * This sets a value of the last 9 bits of the value concatenated 
+	 * with the first seven bits of the location couner.
+	 */
 	public HashMap<String, Integer[]> passOnePgoffsetCheck;
-
+	/**
+	 * The locationCounter is represented as an integer.
+	 */
 	public Integer locationCounter;
-
+	/**
+	 * Is a boolean that is set to true if it is relative and false
+	 * if it is absolute.
+	 */
 	public Boolean isRelative;
-
+	/**
+	 * Stores the starting location as a 4 character string.
+	 */
 	public String startingLocation;
-
+	/**
+	 * Sets the max symbols.
+	 */
 	public final Integer MAX_SYMBOLS = 100;
-
+	/**
+	 * Sets the max literals.
+	 */
 	public final Integer MAX_LITERALS = 50;
-
+	/**
+	 * Sets the max records.
+	 */
 	public final Integer MAX_RECORDS = 200;
-
+	/**
+	 *This is a constructor method that creates an instance of each map and variable.
+	 */
 	public Tables() {
 		machineOpTable = new HashMap<String, char[]>();
 		psuedoOpTable = new HashMap<String, Integer>();
@@ -43,7 +81,9 @@ public class Tables {
 		initMachineOpTable();
 		initPsuedoOpTable();
 	}
-
+	/**
+	 * This method initializes the Machine Operation table.
+	 */
 	private void initMachineOpTable() {
 		char[] tempChar = new char[2];
 
@@ -151,7 +191,9 @@ public class Tables {
 		tempChar[1] = '1';
 		machineOpTable.put("TRAP ", tempChar);
 	}
-
+	/**
+	 * This method initializes the Pseudo Operations table.
+	 */
 	private void initPsuedoOpTable() {
 		psuedoOpTable.put(".ORIG", 1);
 		psuedoOpTable.put(".EQU ", 1);

@@ -13,6 +13,8 @@ import java.io.IOException;
  */
 public class PassTwo {
 	/**
+	 * This is the main method of the PassTwo
+	 * class and performs all of the operations in the class.
 	 * 
 	 * @param objOutName
 	 * @param ppOutName
@@ -1206,6 +1208,15 @@ public class PassTwo {
 		new File("intermediate.txt").deleteOnExit();
 		return null;
 	}
+	/**
+	 * This method performs the same function as the Substring method, however if it
+	 * reads null, overSubstring will replace the null with a space character.
+	 * 
+	 * @param str
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 
 	private static String overSubstring(String str, int x, int y) {
 		Boolean exceptions = true;

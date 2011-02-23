@@ -13,7 +13,15 @@ import java.util.Set;
  * @author Ben Trivett, Bryant Schuck, Gerard Louis
  */
 public class PassOne {
-
+/**
+ * This is the main method of the PassOne class and performs all 
+ * operations in the class.
+ * 
+ * @param input
+ * @param machineTables
+ * @return
+ * @throws IOException
+ */
 	public static String run(String input, Tables machineTables)
 			throws IOException {
 		int lineCounter = 1;
@@ -590,7 +598,16 @@ public class PassOne {
 		// Finish with no errors by returning null.
 		return null;
 	}
-
+	
+/**
+ * This method performs the same function as the Substring method, 
+ * however if it reads null, overSubstring will replace the null with a space character.
+ * 
+ * @param str
+ * @param x
+ * @param y
+ * @return
+ */
 	private static String overSubstring(String str, int x, int y) {
 		Boolean exceptions = true;
 		int z = 0;
@@ -611,6 +628,15 @@ public class PassOne {
 		}
 		return temp;
 	}
+	/**
+	 * This method checks if the address is 
+	 * on the same page as the location counter and returns true/false.
+	 * 
+	 * @param addr
+	 * @param locationCounter
+	 * @return
+	 * 
+	 */
 
 	private static boolean isAddrOnSamePage(String addr, String locationCounter) {
 		String addrBinary = Utility.HexToBinary(addr).substring(0, 7);
@@ -618,7 +644,14 @@ public class PassOne {
 				.substring(0, 7);
 		return (addrBinary.equals(locationCounterBinary));
 	}
-
+	
+/**
+ * This method checks that the 
+ * final operand can be an address for certain relocatable symbols.
+ * 
+ * @param operation
+ * @return
+ */
 	private static boolean isAddrOperation(String operation) {
 		boolean result = false;
 		if (operation.contains("BR") || operation.contains("JSR")
