@@ -10,6 +10,8 @@ public class Tables {
 	
 	public HashMap<String, String[]> literalTable;
 	
+	public HashMap<String, Integer[]> passOnePgoffsetCheck;
+	
 	public Integer locationCounter;
 	
 	public Boolean isRelative;
@@ -27,6 +29,7 @@ public class Tables {
 		psuedoOpTable = new HashMap<String, Integer>();
 		symbolTable = new HashMap<String, String[]>();
 		literalTable = new HashMap<String, String[]>();
+		passOnePgoffsetCheck = new HashMap<String, Integer[]>();
 		locationCounter = 0;
 		isRelative = false;
 		startingLocation = "0000";
