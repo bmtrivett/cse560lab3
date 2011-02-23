@@ -44,13 +44,13 @@ public class PassTwo {
 		String name = overSubstring(read, 0, 6);
 
 		// Use starting location determined from the .END operation in pass one.
-		String start = machineTables.startingLocation;
+		String start = machineTables.symbolTable.get(name)[0];
 
 		// Determine the length of the program's footprint by subtracting the
 		// starting location from the final location counter.
 		int adress = Utility.HexToDecimalValue(start);
 		String length = Utility.DecimalValueToHex(machineTables.locationCounter
-				- Utility.HexToDecimalValue(machineTables.startingLocation));
+				- adress + 1);
 
 		String headerRecord = "H" + name + start + length;
 		// Write the header record to the object file.
@@ -163,8 +163,8 @@ public class PassTwo {
 					op[0] = op[0].substring(7);
 					binary = binary + op[0];
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
+					adress += 1;
 
 					// Build the text record.
 					if (usedRelativeSymbol) {
@@ -190,8 +190,8 @@ public class PassTwo {
 					binary = "0000000000000000";
 
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
+					adress += 1;
 
 					// Build the text record. Always absolute.
 					stringBuffer.append("T").append(hexAdress)
@@ -345,11 +345,11 @@ public class PassTwo {
 					// Build text record.
 					binary = binary + DR + SR1 + SR2;
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -468,8 +468,8 @@ public class PassTwo {
 					op[1] = op[1].substring(7);
 					binary = binary + DR + op[1];
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
+					adress += 1;
 
 					// Build the text record.
 					if (usedRelativeSymbol) {
@@ -549,8 +549,8 @@ public class PassTwo {
 					op[0] = op[0].substring(7);
 					binary = binary + op[0];
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
+					adress += 1;
 
 					// Build the text record.
 					if (usedRelativeSymbol) {
@@ -682,11 +682,11 @@ public class PassTwo {
 					// Build text record.
 					binary = binary + DR + SR1 + index6;
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -706,11 +706,11 @@ public class PassTwo {
 
 					// Build text record.
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -792,11 +792,11 @@ public class PassTwo {
 					// Build text record.
 					binary = binary + DR + SR1 + "000000";
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -885,11 +885,11 @@ public class PassTwo {
 					// Build text record.
 					binary = binary + baseR + index6;
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -942,11 +942,11 @@ public class PassTwo {
 					// Build text record.
 					binary = binary + trapvector8;
 					textRecord = Utility.BinaryToHex(binary);
-					adress += 1;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					stringBuffer.append("T").append(hexAdress)
 							.append(textRecord);
 					pTextRecord = stringBuffer.toString();
+					adress += 1;
 
 					// Write text record to object and pretty print files.
 					bufferedWriter.write(pTextRecord);
@@ -1038,11 +1038,11 @@ public class PassTwo {
 					while (count < op[0].length()) {
 
 						// Convert character into hex ascii value and binary.
-						adress++;
 						String hexAdress = Utility.DecimalValueToHex(adress);
 						textRecord = Utility.DecimalValueToHex((int) op[0]
 								.charAt(count));
 						binary = Utility.HexToBinary(textRecord);
+						adress++;
 
 						// Write to object file.
 						pTextRecord = "T" + hexAdress + textRecord;
@@ -1067,13 +1067,13 @@ public class PassTwo {
 					}
 
 					// Write a null to object file.
-					adress++;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					textRecord = "0000";
 					binary = "0000000000000000";
 					pTextRecord = "T" + hexAdress + textRecord;
 					bufferedWriter.write(pTextRecord);
 					bufferedWriter.newLine();
+					adress++;
 
 					// Write a null to pretty print.
 					prettyPrint.write("(" + hexAdress + ") " + textRecord + " "
@@ -1126,10 +1126,10 @@ public class PassTwo {
 					}
 
 					// Convert into hex and binary.
-					adress++;
 					String hexAdress = Utility.DecimalValueToHex(adress);
 					textRecord = Utility.DecimalValueToHex(bin);
 					binary = Utility.HexToBinary(textRecord);
+					adress++;
 
 					// Write to object file.
 					pTextRecord = "T" + hexAdress + textRecord;
@@ -1162,7 +1162,6 @@ public class PassTwo {
 				return "The operation " + operations + " is undefined on line "
 						+ lineCounter + ".";
 			}
-
 			// Read in next line from the intermediate file.
 			read = file.readLine();
 			if (read != null) {
