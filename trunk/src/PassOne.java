@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Set;
 
 public class PassOne {
-
+	
 	public static String run(String input, Tables machineTables)
 			throws IOException {
 		int lineCounter = 1;
@@ -84,12 +86,6 @@ public class PassOne {
 		// Read operations until there is a .END or the source file ends.
 		while (!overSubstring(read, 9, 14).equals(".END ")) {
 
-			// Empty line means there's no .END or the program is formatted
-			// incorrectly.
-			if (read == null || read.trim().equals("")) {
-				return "Program is missing a .END psuedo op or an empty line was read";
-			}
-
 			// If the line is not a comment
 			if (read.charAt(0) != ';') {
 				
@@ -118,7 +114,7 @@ public class PassOne {
 				String firstWord = overSubstring(read, 0, 6);
 				if (!firstWord.equals("      ")) {
 					String[] tempString = new String[2];
-
+					
 					// Labels must not include blanks.
 					if (firstWord.trim().contains(" ")) {
 						return "Label has a space in it on line " + lineCounter
@@ -139,6 +135,10 @@ public class PassOne {
 					}
 					
 					// TODO: Labels cannot be a predefined operation
+					if (machineTables.machineOpTable.containsKey(firstWord.substring(0, 5))) {
+						return "Label cannot match machine operation name on line "
+								+ lineCounter + ".";
+					}
 
 					// If the operation is .EQU then set values accordingly.
 					if (overSubstring(read, 9, 14).equals(".EQU ")) {
@@ -228,6 +228,68 @@ public class PassOne {
 					// location counter by one.
 					if (machineTables.machineOpTable.containsKey(operation)) {
 						machineTables.locationCounter++;
+						
+						// If it is a pgoffset9 and it is decimal or hexadecimal
+						// address, then check that addr is on the same page
+						// as location counter.
+						if (isAddrOperation(operation)) {
+							String addr = "";
+							if (operation.contains("BR") 
+									|| operation.contains("JSR")
+									|| operation.contains("JMP")) {
+								addr = overSubstring(read,17,read.length());
+							}
+							else {
+								addr = overSubstring(read,20,read.length());
+							}
+							if (addr.length()>0) {
+								if (addr.charAt(0) == '#' || addr.charAt(0) == 'x') {
+									if (addr.charAt(0) == 'x' && !Utility.isHexString((addr.substring(1)).trim())) {
+										return "The hex string on line " + lineCounter + " is "
+										+ " not properly formatted: " + addr + ".";
+									}
+									int i = 0;
+									if (addr.charAt(0) == 'x') {
+										i = Utility.HexToDecimalValue((addr.substring(1)).trim());
+									}
+									else {
+										i = Integer.parseInt(addr.trim());
+									}
+									if (i<0 || i>65535) {
+										return "The address on line " + lineCounter + " is "
+										+ "not within valid decimal range (0-65,535).";
+									}
+									addr = Integer.toHexString(i);
+									if (addr.length() < 4) {
+										int j = addr.length();
+										while (j < 4) {
+											addr = "0" + addr;
+											j++;
+										}
+									}
+									if(!isAddrOnSamePage(addr, 
+											Utility.DecimalValueToHex(machineTables.locationCounter))) {
+										return "The address on line " + lineCounter + " is "
+										+ " not on the same page as the location counter.";
+									}
+								}
+								// Otherwise, store symbol in passOnePgoffsetCheck map,
+								// so that it can be checked at the end of pass one.
+								else if (!(addr.charAt(0) == '=')) {
+									if (addr.length() < 6) {
+										int i = addr.length();
+										while (i < 6) {
+											addr = addr + " ";
+											i++;
+										}
+									}
+									Integer[] pgoffsetArray = new Integer[2];
+									pgoffsetArray[0] = machineTables.locationCounter;
+									pgoffsetArray[1] = lineCounter;
+									machineTables.passOnePgoffsetCheck.put(addr, pgoffsetArray);
+								}
+							}
+						}
 					} else {
 
 						// BLKW increments the location counter by the value
@@ -291,7 +353,7 @@ public class PassOne {
 								return ".STRZ operand missing quotations on line "
 										+ lineCounter + ".";
 							}
-							String value = overSubstring(read, 18, index3);
+							String value = overSubstring(read, 18, 18+index3);
 							machineTables.locationCounter += value.length() + 1;
 
 						} else if (operation.equals(".FILL")) {
@@ -332,9 +394,9 @@ public class PassOne {
 
 						// Check if it is a hex value.
 					} else if (temp.charAt(0) == 'x') {
-						if (!Utility.isHexString(temp.substring(1))) {
-							return "Invalid hexadecimal value on line "
-									+ lineCounter + ".";
+						if (!Utility.isHexString(temp.substring(1)) || temp.charAt(1) == '-') {
+							return "Invalid hexadecimal value (permitted range is x0-xFFFF) " 
+									+ "on line " + lineCounter + ".";
 						}
 						tempString[0] = Utility.DecimalValueToHex(Utility
 								.HexToDecimalValue(temp.substring(1)));
@@ -353,6 +415,12 @@ public class PassOne {
 				bufferedWriter.newLine();
 				read = file.readLine();
 				lineCounter++;
+				
+				// Empty line means there's no .END or the program is formatted
+				// incorrectly.
+				if (read == null || read.trim().equals("")) {
+					return "Program is missing a .END pseudo-op.";
+				}
 
 				// Line is a comment. Write line to comments.txt and
 				// increment line counter.
@@ -364,6 +432,11 @@ public class PassOne {
 			}
 		}
 
+		// Check to see if .END has a label (should not have one).
+		if(!overSubstring(read,0,9).matches("[ ]{9}")) {
+			return "The .END pseudo-op must not have a label (line "
+					+ lineCounter + ").";
+		}
 		// Remove in line comments and write them to comments.txt.
 		String comment = ";";
 		int index4 = read.indexOf(comment);
@@ -439,7 +512,29 @@ public class PassOne {
 			machineTables.literalTable.put(keys[count - 1], tempVal);
 			count--;
 		}
-
+		
+		// Check to see that all pgoffset9 addresses are in the same page
+		// as the location counter.
+		Set<String> pgoffsetKeys = machineTables.passOnePgoffsetCheck.keySet();
+		Iterator<String> pgoffsetIterator = pgoffsetKeys.iterator();
+		while (pgoffsetIterator.hasNext()) {
+			String pgoffsetKey = pgoffsetIterator.next();
+			Integer[] pgArray = machineTables.passOnePgoffsetCheck.get(pgoffsetKey);
+			if (machineTables.symbolTable.containsKey(pgoffsetKey)) {
+				String Addr = Utility.DecimalValueToHex(pgArray[0]);
+				String locCount = (machineTables.symbolTable.get(pgoffsetKey))[0];
+				if (!(isAddrOnSamePage(Addr,locCount))) {
+					return "The symbol " + pgoffsetKey.trim() + " on line " 
+							+ pgArray[1] + " is not on the same page as the "
+							+ "location counter.";
+				}
+			}
+			else {
+				return "The symbol " + pgoffsetKey.trim() + " on line " 
+						+ pgArray[1] + " is never defined.";
+			}
+		}
+		
 		// Make sure the program fits on one page of memory if relative.
 		if (machineTables.isRelative) {
 			if (!Utility.DecimalValueToHex(machineTables.locationCounter)
@@ -484,5 +579,32 @@ public class PassOne {
 			z--;
 		}
 		return temp;
+	}
+	
+	private static boolean isAddrOnSamePage(String addr, String locationCounter) {
+		String addrBinary = Utility.HexToBinary(addr).substring(0, 9);
+		String locationCounterBinary = Utility.HexToBinary(locationCounter).substring(0, 9);
+		return (addrBinary.equals(locationCounterBinary));
+	}
+	
+	private static boolean isAddrOperation(String operation) {
+		boolean result = false;
+		if (operation.contains("BR") 
+			|| operation.contains("JSR")
+			|| operation.contains("JMP")
+			|| operation.contains("LD") 
+			|| operation.contains("LDI")
+			|| operation.contains("LEA")
+			|| operation.contains("ST")
+			|| operation.contains("STI")) {
+			result = true;
+		}
+		if (operation.contains("JSRR")
+			|| operation.contains("JMPR")
+			|| operation.contains("LDR")
+			|| operation.contains("STR")) {
+			result = false;
+		}
+		return result;
 	}
 }
