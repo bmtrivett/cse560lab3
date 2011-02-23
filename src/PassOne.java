@@ -65,7 +65,10 @@ public class PassOne {
 
 		// Determine the starting location and whether it is relative or
 		// absolute.
-		String location = overSubstring(read, 18, 22);
+		String location = "    ";
+		if (read.length() > 18) {
+			location = overSubstring(read, 18, 22);
+		}
 		if (location.equals("    ")) {
 			machineTables.locationCounter = 0;
 			machineTables.isRelative = true;
@@ -210,7 +213,7 @@ public class PassOne {
 
 					// Check if the symbol already exists in the table.
 					if (machineTables.symbolTable.containsKey(firstWord)) {
-						return "Multiple definition of symbol " + firstWord
+						return "Multiple definition of symbol " + firstWord.trim()
 								+ " on line " + lineCounter + ".";
 					}
 
