@@ -57,6 +57,9 @@ public class PassTwo {
 		if (length.equals("0000")) {
 			return "The program has a length of 0";
 		}
+		if (length.equals("FFFF") && start.equals("0000")) {
+			return "The program has a length is greater than xFFFF";
+		}
 		String header = "H";
 		if (machineTables.isRelative){
 			header = "G";
