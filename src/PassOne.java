@@ -171,6 +171,12 @@ public class PassOne {
 							// Check next to see if it is a decimal value.
 							temp = overSubstring(read, 17, read.length());
 							if (temp.charAt(0) == '#') {
+								try {
+									Integer.parseInt(temp.substring(1), 10);
+								} catch (Exception e){
+									return "Decimal out of range on line "
+									+ lineCounter + ".";
+								}
 								Integer decimalOperand = Integer.parseInt(
 										temp.substring(1), 10);
 								if (decimalOperand < -32768
@@ -303,12 +309,16 @@ public class PassOne {
 								// so that it can be checked at the end of pass
 								// one.
 								else if (!(addr.charAt(0) == '=')) {
+									addr = addr.trim();
 									if (addr.length() < 6) {
 										int i = addr.length();
 										while (i < 6) {
 											addr = addr + " ";
 											i++;
 										}
+									}
+									else if (addr.length() > 6) {
+										return "The symbol length is greater than 6.";
 									}
 									Integer[] pgoffsetArray = new Integer[2];
 									pgoffsetArray[0] = machineTables.locationCounter;

@@ -53,6 +53,10 @@ public class PassTwo {
 		int adress = Utility.HexToDecimalValue(start);
 		String length = Utility.DecimalValueToHex(machineTables.locationCounter
 				- adress + 1);
+		
+		if (length.equals("0000")) {
+			return "The program has a length of 0";
+		}
 
 		String headerRecord = "H" + name + start + length;
 		// Write the header record to the object file.
