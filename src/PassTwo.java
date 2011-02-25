@@ -57,8 +57,12 @@ public class PassTwo {
 		if (length.equals("0000")) {
 			return "The program has a length of 0";
 		}
+		String header = "H";
+		if (machineTables.isRelative){
+			header = "G";
+		}
 
-		String headerRecord = "H" + name + start + length;
+		String headerRecord = header + name + start + length;
 		// Write the header record to the object file.
 		bufferedWriter.write(headerRecord);
 		bufferedWriter.newLine();
