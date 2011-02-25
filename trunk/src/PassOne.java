@@ -77,9 +77,10 @@ public class PassOne {
 		if (read.length() > 18) {
 			location = overSubstring(read, 18, 22);
 		}
+		machineTables.isSymbolRelative = false;
 		if (location.equals("    ")) {
 			machineTables.locationCounter = 0;
-			machineTables.isRelative = false;
+			machineTables.isRelative = true;
 		} else {
 			machineTables.locationCounter = Utility.HexToDecimalValue(location);
 			machineTables.isRelative = false;
@@ -222,7 +223,7 @@ public class PassOne {
 						tempString[0] = Utility
 								.DecimalValueToHex(machineTables.locationCounter);
 						tempString[1] = Utility
-								.BooleanToString(machineTables.isRelative);
+								.BooleanToString(machineTables.isSymbolRelative);
 					}
 
 					// Check if the symbol already exists in the table.
@@ -352,7 +353,7 @@ public class PassOne {
 								machineTables.locationCounter += Utility
 										.HexToDecimalValue(machineTables.symbolTable
 												.get(temp)[0]);
-								machineTables.isRelative = true;
+								machineTables.isSymbolRelative = true;
 							} else {
 
 								// Check next to see if it is a decimal

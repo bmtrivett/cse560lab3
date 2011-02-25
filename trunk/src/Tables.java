@@ -25,12 +25,12 @@ public class Tables {
 	 * The symbolTable is a hash map that has the label as the string 
 	 * key and the value as a string array. The format of the array is as follows:
 	 * Position 0: A hex string representing the location/value of that label
-	 * Position 1: Ò0Ó for absolute or Ò1Ó for relative
+	 * Position 1: ï¿½0ï¿½ for absolute or ï¿½1ï¿½ for relative
 	 */
 
 	public HashMap<String, String[]> symbolTable;
 	/**
-	 * The literalTable is a hash map with the key being ÒxHEXÓ/Ó#DECÓ as a string. 
+	 * The literalTable is a hash map with the key being ï¿½xHEXï¿½/ï¿½#DECï¿½ as a string. 
 	 * The value in the map is a string array with pos 0 being the hex value of the 
 	 * literal (string length 4).
 	 */
@@ -49,6 +49,8 @@ public class Tables {
 	 * if it is absolute.
 	 */
 	public Boolean isRelative;
+	
+	public Boolean isSymbolRelative;
 	/**
 	 * Stores the starting location as a 4 character string.
 	 */
