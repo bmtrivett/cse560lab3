@@ -79,7 +79,7 @@ public class PassOne {
 		}
 		if (location.equals("    ")) {
 			machineTables.locationCounter = 0;
-			machineTables.isRelative = true;
+			machineTables.isRelative = false;
 		} else {
 			machineTables.locationCounter = Utility.HexToDecimalValue(location);
 			machineTables.isRelative = false;
@@ -254,7 +254,8 @@ public class PassOne {
 									|| operation.contains("JMP")) {
 								addr = overSubstring(read, 17, read.length());
 							} else {
-								addr = overSubstring(read, 20, read.length());
+								int indexofcomma = read.indexOf(',');
+								addr = overSubstring(read, indexofcomma+1, read.length());
 							}
 							if (addr.length() > 0) {
 								if (addr.charAt(0) == '#'
@@ -341,6 +342,7 @@ public class PassOne {
 								machineTables.locationCounter += Utility
 										.HexToDecimalValue(machineTables.symbolTable
 												.get(temp)[0]);
+								machineTables.isRelative = true;
 							} else {
 
 								// Check next to see if it is a decimal
